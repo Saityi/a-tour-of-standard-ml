@@ -1,3 +1,3 @@
 structure ValyrianGreeting :> GREETING = struct
-  fun greet () = print "Valar morghulis.\n"
+  val greeting = "Valar morghulis.\n"
 end

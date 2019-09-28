@@ -1,3 +1,3 @@
 structure EnglishGreeting :> GREETING = struct
-  fun greet () = print "Hello.\n"
+  val greeting = "Hello.\n"
 end

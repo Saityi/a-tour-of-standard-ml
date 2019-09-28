@@ -5,6 +5,7 @@ Group is
   src/hello.sml
   src/modules.sml
   src/functions.sml
-  src/greeter.sig
-  src/greeter1.sml
-  src/greeter2.sml
+  src/greeting.sig
+  src/greeting1.sml
+  src/greeting2.sml
+  src/greeter.sml

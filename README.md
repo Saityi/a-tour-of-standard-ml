@@ -11,6 +11,7 @@
 This tour is made up of several files intended to be loaded into an SML REPL, as so:
 
 ```sml
+(* REPL *)
 - use "src/hello.sml";
 [opening src/hello.sml]
 [autoloading]
@@ -29,6 +30,7 @@ Hello!
 You may start up an environment with all of the examples loaded by compiling the defintions in SML/NJ `.cm` file.
 
 ```sml
+(* REPL *)
 - CM.make "tour.cm";
 ```
 
@@ -43,7 +45,7 @@ structure Modules = struct
   open String
   structure R = Random
 
-  fun favourite_num () =
+  fun favouriteNum () =
       let val seed  = R.rand (0, 0)
           val myInt = R.randRange (0, 10) seed
       in print ("My favourite number is " ^ (Int.toString myInt) ^ "\n")
@@ -58,7 +60,7 @@ This program uses the modules `String`, `Int`, and `Random`.
 ```sml
 (* REPL *)
 - use "modules.sml";
-- Modules.favourite_num ();
+- Modules.favouriteNum ();
 ```
 ---
 
@@ -91,19 +93,19 @@ Fix the error by adding `pi` to the `sig` of `Math`, save, and reload the file i
 Signatures do not necessarily need to be tied to a specific structure. A signature may be defined separately, and have multiple implementations.
 
 ```sml
-(* signatures2.sig *)
+(* greeting.sig *)
 signature GREETING = sig
-  val greet : unit -> unit
+  val greeting : string
 end
 
-(* greeter1.sml *)
-structure ValyrianGreeting :> GREETING = struct
-  fun greet () = print "Valar morghulis.\n"
-end
-
-(* greeter2.sml *)
+(* greeting1.sml *)
 structure EnglishGreeting :> GREETING = struct
-  fun greet () = print "Hello.\n"
+  val greeting = "Hello.\n"
+end
+
+(* greeting2.sml *)
+structure ValyrianGreeting :> GREETING = struct
+  val greeting = "Valar morghulis.\n"
 end
 ```
 
@@ -111,26 +113,51 @@ Signatures, by convention, are `UPPERCASE`.
 
 ```sml
 (* REPL *)
-- use "src/signatures2.sig";
-[opening src/signatures2.sig]
-signature GREETING = sig val greet : unit -> unit end
+- use "src/greeting.sig";
+[opening src/greeter.sig]
+signature GREETING = sig val greeting : string end
 
-- use "src/greeter2.sml";
-[opening src/greeter2.sml]
+- use "src/greeting1.sml";
+[opening src/greeter1.sml]
 structure EnglishGreeting : GREETING
 
-- use "src/greeter1.sml";
-[opening src/greeter1.sml]
+- use "src/greeting2.sml";
+[opening src/greeter2.sml]
 structure ValyrianGreeting : GREETING
 
-- EnglishGreeting.greet ();
-Hello!
+- EnglishGreeting.greeting;
+val it = "Hello.\n" : string
 
-- ValyrianGreeting.greet ();
+- ValyrianGreeting.greeting;
+val it = "Valar morghulis.\n" : string
+```
+
+---
+
+Modules may accept other modules as parameters, including accepting a signature rather than a specific implementation. These are called functors.
+
+```sml
+(* greeter.sml *)
+functor Greeter (G : GREETING) = struct
+  fun greet () = print G.greeting
+end
+
+(* REPL *)
+- structure englishGreeter = Greeter(EnglishGreeting);
+structure englishGreeter : sig val greet : unit -> unit end
+- englishGreeter.greet ();
+Hello.
+
+- structure essosGreeter = Greeter(ValyrianGreeting);
+structure essosGreeter : sig val greet : unit -> unit end
+- essosGreeter.greet ();
 Valar morghulis.
 ```
 
 ---
+Functions are declared using `fn`, and may be given a name with `val`, such as `inc`. All functions take one argument and are curried. To declare a function with multiple arguments, use multiple functions, as in `add`. 
+
+`inc'` partially applies `add` to 1, to create a new function. This has the same behaviour as `inc`.
 ```sml
 (* functions.sml *)
 structure Functions = struct
@@ -148,11 +175,7 @@ structure Functions = struct
   fun printExample () = print (Int.toString (add 42 13))
 end
 ```
-Functions are declared using `fn`, and may be given a name with `val`, such as `inc`. All functions take one argument and are curried. To declare a function with multiple arguments, use multiple functions, as in `add`. 
-
-`inc'` partially applies `add` to 1, to create a new function. This has the same behaviour as `inc`.
-
-Since it is so common, there is syntactic sugar for declaring functions -- `fun`. This is first seen in `Functions` to declare `add'`, which is equivalent to `add`, but with a simpler definition. 
+As the single argument `fn` form is harder to work with, there is syntactic sugar for declaring functions of any number of arguments -- `fun`. This is first seen in `Functions` to declare `add'`, which is equivalent to `add`, but with a simpler definition. 
 
 Type declarations are not required, as Standard ML features powerful type inference, but may be provided. If provided, they must be surrounded by parenthesis, as seen in `sub`.
 
@@ -175,6 +198,7 @@ structure Functions :
     val div' : int * int -> int
     val printExample : unit -> unit
   end
+val it = () : unit
 ```
 `use` returns `() : unit` after opening the file, and the signature of `printExample` shows a `unit` return type, as well.
 

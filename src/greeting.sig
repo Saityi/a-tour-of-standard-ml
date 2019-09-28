@@ -1,3 +1,3 @@
 signature GREETING = sig
-  val greet : unit -> unit
+  val greeting : string
 end
