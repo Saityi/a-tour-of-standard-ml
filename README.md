@@ -70,7 +70,7 @@ This program uses the modules `String`, `Int`, and `Random`.
 ```
 ---
 
-In Standard ML, structures expose all of their contents, but what is exported may be controlled by defining a signature for the structure.
+In Standard ML, modules expose all of their contents, but what is exported may be controlled by defining a signature for the module.
 
 ```sml
 (* signatures.sml *)
@@ -96,7 +96,7 @@ Exercise: Fix the error by adding `pi` to the `sig` of `Math`, save, and reload 
 
 ---
 
-Signatures do not necessarily need to be tied to a specific structure. A signature may be defined separately, and have multiple implementations.
+Signatures do not necessarily need to be tied to a specific module. A signature may be defined separately, and have multiple implementations.
 
 ```sml
 (* greeting.sig *)
@@ -140,7 +140,7 @@ val it = "Valar morghulis.\n" : string
 
 ---
 
-Modules may accept other modules as parameters, including accepting a signature rather than a specific implementation. These are called functors.
+Modules may accept other modules as parameters, including accepting a signature rather than a specific implementation. These are called functors, and declared using the `functor` keyword.
 
 ```sml
 (* greeter.sml *)
@@ -181,7 +181,7 @@ structure Functions = struct
   fun printExample () = print (Int.toString (add 42 13))
 end
 ```
-As the single argument `fn` form is harder to work with, there is syntactic sugar for declaring functions of any number of arguments -- `fun`. This is first seen in `Functions` to declare `add'`, which is equivalent to `add`, but with a simpler definition. 
+As the single argument `fn` form is harder to work with, there is syntactic sugar for declaring functions of any number of arguments: `fun`. This is first seen in `Functions` to declare `add'`, which is equivalent to `add`, but with a simpler definition. 
 
 Type declarations are not required, as Standard ML features powerful type inference, but may be provided. If provided, they must be surrounded by parenthesis, as seen in `sub`.
 
