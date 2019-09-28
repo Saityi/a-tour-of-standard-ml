@@ -1,0 +1,10 @@
+Group is
+  $/basis.cm
+  $/smlnj-lib.cm
+
+  src/hello.sml
+  src/modules.sml
+  src/functions.sml
+  src/greeter.sig
+  src/greeter1.sml
+  src/greeter2.sml
