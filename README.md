@@ -4,29 +4,35 @@
 
 - Install Standard ML of New Jersey: https://www.smlnj.org/
   - SML/NJ contains an interactive compiler manager / REPL which will be used for the examples throughout this tour
-  - SML/NJ will also install an implementation of the SML standard library, the Basis.
+  - SML/NJ will also install an implementation of the standard library, the SML Basis Library.
 - Ensure SML/NJ has been added to the path as appropriate for your architecture
 - Clone this repository and begin the tour!
 ## The Tour
 This tour is made up of several files intended to be loaded into an SML REPL, as so:
 
+```
+a-tour-of-sml/ $ sml
+```
 ```sml
 (* REPL *)
+Standard ML of New Jersey v110.93 [built: Thu Sep 05 19:16:24 2019]
 - use "src/hello.sml";
 [opening src/hello.sml]
 [autoloading]
 [library $SMLNJ-BASIS/basis.cm is stable]
 [library $SMLNJ-BASIS/(basis.cm):basis-common.cm is stable]
 [autoloading done]
-structure HelloWorld :
+structure Hello :
   sig
     val hello : unit -> unit
     val main : 'a * 'b -> Word32.word
   end
 val it = () : unit
-- HelloWorld.hello ();
+- Hello.hello ();
 Hello!
 ```
+`it` always contains the value of the last expression evaluated in the REPL.
+
 You may start up an environment with all of the examples loaded by compiling the defintions in SML/NJ `.cm` file.
 
 ```sml
@@ -86,7 +92,7 @@ structure Math : sig val e : real end
 stdIn:38.1-38.8 Error: unbound variable or constructor: pi in path Math.pi
 ```
 
-Fix the error by adding `pi` to the `sig` of `Math`, save, and reload the file in your REPL. Try to evaluate `Math.pi` again.
+Exercise: Fix the error by adding `pi` to the `sig` of `Math`, save, and reload the file in your REPL. Try to evaluate `Math.pi` again.
 
 ---
 
@@ -183,7 +189,9 @@ You may make an uncurried version of the function by accepting a tuple as an arg
 
 Standard ML has tuples, so functions may return any number of results, as in `divmod`.
 
-If you require a function with no arguments, such as a function that produces side effects, but requires no input, you may make a function with the `unit` type as its only argument, as seen in `printExample`. In Standard ML, everything must produce a value, so side-effecting functions return `unit`, as well. This may be seen when you call the `use` function to load the functions module:
+While all functions take one argument, you may not need one, such as a in function that produces side effects, but requires no input. To write such a function, you use a `unit` argument, as seen in `printExample`. `unit` is a type with only one value, `()`. 
+
+In Standard ML, everything must produce a value, so side-effecting functions return `unit`, as well. This may be seen when you call the `use` function to load the functions module:
 
 ```sml
 (* REPL *)
@@ -191,11 +199,14 @@ If you require a function with no arguments, such as a function that produces si
 [opening functions.sml]
 structure Functions :
   sig
-    val add : int -> int -> int
     val inc : int -> int
+    val add : int -> int -> int
+    val inc' : int -> int
+    val add' : int -> int -> int
     val sub : int -> int -> int
     val mul : int * int -> int
     val div' : int * int -> int
+    val divmod : int -> int -> int * int
     val printExample : unit -> unit
   end
 val it = () : unit
