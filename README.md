@@ -8,8 +8,7 @@
 - Ensure SML/NJ has been added to the path as appropriate for your architecture
 - Clone this repository and begin the tour!
 ## The Tour
-This tour is made up of several files intended to be loaded into an SML REPL, as so:
-
+This tour is intended to be followed at a Standard ML REPL. There are several files you may load, included in the repository, with some definitions.
 ```
 a-tour-of-sml/ $ sml
 ```
@@ -41,6 +40,83 @@ You may start up an environment with all of the examples loaded by compiling the
 ```
 
 Note: REPL examples are cleaned up slightly, such as removing the unit return value information. The text that appears in your REPL may differ somewhat, as a result.
+
+---
+The `val` keyword allows you to give a name to values.
+
+```sml
+- val i = 10;
+val i = 10 : int
+```
+---
+Functions are declared using `fn`, and may be given a name with `val`. All functions take one argument and are curried. 
+```sml
+- val inc = fn x => x + 1;
+val inc = fn : int -> int
+```
+To declare a function with multiple arguments, use multiple functions.
+```sml
+- val add = fn x => fn y => x + y
+val add = fn : int -> int -> int
+```
+`inc'` partially applies `add` to 1, to create a new function. This has the same behaviour as `inc`.
+```sml
+- val inc' = add 1;
+val inc' = fn : int -> int
+```
+As the single argument `fn` form is harder to work with, there is syntactic sugar for declaring functions of any number of arguments: `fun`. Here we declare `add'`, which has the same behaviour as `add`, but with a simpler definition.
+```sml
+- fun add' x y = x + y;
+val add' = fn : int -> int -> int
+```
+Type declarations are not required, as Standard ML features powerful type inference, but may be provided. If provided, they must be surrounded by parenthesis.
+```sml
+- fun sub (x: int) (y: int) = x - y;
+val sub = fn : int -> int -> int
+```
+You may make an uncurried version of the function by accepting a tuple as an argument.
+```sml
+- fun mul (x, y) = x * y;
+val mul = fn : int * int -> int
+``` 
+This may also be provided with type declarations.
+```sml
+- fun div' (x: int, y: int) = x div y;
+val div' = fn : int * int -> int
+```
+Standard ML has tuples, so functions may return any number of results.
+```sml
+- fun divmod x y = (x div y, x mod y);
+val divmod = fn : int -> int -> int * int
+```
+
+While all functions take one argument, you may not need one, such as a in function that produces side effects, but requires no input. To write such a function, you use a `unit` argument. `unit` is a type with only one value, `()`. 
+```sml
+- fun printExample () = print (Int.toString (add 42 13));
+val printExample = fn : unit -> unit
+- ();
+val it = () : unit
+```
+In Standard ML, everything must produce a value, so side-effecting functions return `unit`, as well. This may be seen when you call the `use` function to load the functions module:
+```sml
+(* REPL *)
+- use "functions.sml";
+[opening functions.sml]
+structure Functions :
+  sig
+    val inc : int -> int
+    val add : int -> int -> int
+    val inc' : int -> int
+    val add' : int -> int -> int
+    val sub : int -> int -> int
+    val mul : int * int -> int
+    val div' : int * int -> int
+    val divmod : int -> int -> int * int
+    val printExample : unit -> unit
+  end
+val it = () : unit
+```
+`use` returns `() : unit` after opening the file.
 
 ---
 
@@ -160,57 +236,3 @@ structure essosGreeter : sig val greet : unit -> unit end
 Valar morghulis.
 ```
 
----
-Functions are declared using `fn`, and may be given a name with `val`, such as `inc`. All functions take one argument and are curried. To declare a function with multiple arguments, use multiple functions, as in `add`. 
-
-`inc'` partially applies `add` to 1, to create a new function. This has the same behaviour as `inc`.
-```sml
-(* functions.sml *)
-structure Functions = struct
-  val inc = fn x => x + 1
-  val add = fn x => fn y => x + y
-  val inc' = add 1
-
-  fun add' x y = x + y
-
-  fun sub (x: int) (y: int) = x - y
-  fun mul (x, y) = x * y
-  fun div' (x: int, y: int) = x div y
-  fun divmod x y = ((x div y), (x mod y))
-
-  fun printExample () = print (Int.toString (add 42 13))
-end
-```
-As the single argument `fn` form is harder to work with, there is syntactic sugar for declaring functions of any number of arguments: `fun`. This is first seen in `Functions` to declare `add'`, which is equivalent to `add`, but with a simpler definition. 
-
-Type declarations are not required, as Standard ML features powerful type inference, but may be provided. If provided, they must be surrounded by parenthesis, as seen in `sub`.
-
-You may make an uncurried version of the function by accepting a tuple as an argument, as seen in `mul`. This may also be provided with type declarations, as in `div'`.
-
-Standard ML has tuples, so functions may return any number of results, as in `divmod`.
-
-While all functions take one argument, you may not need one, such as a in function that produces side effects, but requires no input. To write such a function, you use a `unit` argument, as seen in `printExample`. `unit` is a type with only one value, `()`. 
-
-In Standard ML, everything must produce a value, so side-effecting functions return `unit`, as well. This may be seen when you call the `use` function to load the functions module:
-
-```sml
-(* REPL *)
-- use "functions.sml";
-[opening functions.sml]
-structure Functions :
-  sig
-    val inc : int -> int
-    val add : int -> int -> int
-    val inc' : int -> int
-    val add' : int -> int -> int
-    val sub : int -> int -> int
-    val mul : int * int -> int
-    val div' : int * int -> int
-    val divmod : int -> int -> int * int
-    val printExample : unit -> unit
-  end
-val it = () : unit
-```
-`use` returns `() : unit` after opening the file, and the signature of `printExample` shows a `unit` return type, as well.
-
----
