@@ -48,6 +48,27 @@ The `val` keyword allows you to give a name to values.
 - val i = 10;
 val i = 10 : int
 ```
+Values may be given explicit type declarations, but they are not required.
+```sml
+- val i: real = 10.0;
+val i = 10.0 : real
+```
+It is possible to name multiple values at once to be used in some expression
+```sml
+- let val x = 1
+=     val y = 2
+= in x + y
+= end;
+val it = 3 : int
+```
+Outside of the expression, however, their names become unbound again:
+```sml
+- let val x = 1 in x end;
+val it = 1 : int
+- x;
+stdIn:13.1 Error: unbound variable or constructor: x
+```
+
 ---
 Functions are declared using `fn`, and may be given a name with `val`. All functions take one argument and are curried. 
 ```sml
