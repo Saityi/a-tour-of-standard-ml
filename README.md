@@ -1,13 +1,10 @@
 # A Tour of Standard ML
----
 
 ## What is Standard ML?
 
 Standard ML is a functional programming language with a reasonably small formal specification. It has static types to prevent a wide array of common errors, but also features powerful type inference, requiring few to no type declarations. It is easy to define new data types and structures, due to [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type), and write well-abstracted, easy to reason about code due to its powerful module system and [parametric polymorphism (generics)](https://en.wikipedia.org/wiki/Parametric_polymorphism).
 
 There are free, full-program optimising compilers for it, producing efficient native code, such as [MLton](http://www.mlton.org/). The concurrency extension 'Concurrent ML' provides support for [communicating sequential processes](https://en.wikipedia.org/wiki/Communicating_sequential_processes), and is supported by SML/NJ and MLton.
-
----
 
 ## Prerequisites
 
@@ -18,7 +15,7 @@ There are free, full-program optimising compilers for it, producing efficient na
 - Clone this repository and begin the tour!
 
 # The Tour
----
+
 This tour is intended to be followed at a Standard ML REPL. There are several files you may load, included in the repository, with some definitions.
 ```
 a-tour-of-sml/ $ sml
@@ -49,7 +46,7 @@ You may start up an environment with all of the examples loaded by compiling the
 Note: REPL examples are cleaned up slightly, such as removing the unit return value information. The text that appears in your REPL may differ somewhat, as a result.
 
 ## Basics
----
+
 ## Modules, values, functions
 ### Values
 The `val` keyword allows you to give a name to values.
