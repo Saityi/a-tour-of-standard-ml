@@ -325,7 +325,18 @@ val ls = [1,2] : int list
 val recs = {a=1,b=2} : {a:int, b:int}
 ```
 
-Note that tuples are actually a special case of records with number labels: 
+Note that records are not maps. Record fields may be numbers or labels.
+```sml
+(* Arbitrary values, such as strings, may not be used as fields *)
+- {"a"=1};
+stdIn:3.2-3.6 Error: syntax error: deleting  STRING EQUALOP
+- {a=1};
+val it = {a=1} : {a:int}
+- {1=1} ;
+val it = {1=1} : {1:int}
+```
+
+Tuples are actually a special case of records with number labels: 
 ```sml
 - {1 = "a", 2 = "b"} = ("a", "b");
 val it = true : bool

@@ -10,3 +10,4 @@ Group is
   src/greeting1.sml
   src/greeting2.sml
   src/greeter.sml
+  src/datatypes.sml
