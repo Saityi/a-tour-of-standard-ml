@@ -1,4 +1,13 @@
 # A Tour of Standard ML
+---
+
+## What is Standard ML?
+
+Standard ML is a functional programming language with a reasonably small formal specification. It has static types to prevent a wide array of common errors, but also features powerful type inference, requiring few to no type declarations. It is easy to define new data types and structures, due to [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type), and write well-abstracted, easy to reason about code due to its powerful module system and [parametric polymorphism (generics)](https://en.wikipedia.org/wiki/Parametric_polymorphism).
+
+There are free, full-program optimising compilers for it, producing efficient native code, such as [MLton](http://www.mlton.org/). The concurrency extension 'Concurrent ML' provides support for [communicating sequential processes](https://en.wikipedia.org/wiki/Communicating_sequential_processes), and is supported by SML/NJ and MLton.
+
+---
 
 ## Prerequisites
 
@@ -7,6 +16,9 @@
   - SML/NJ will also install an implementation of the standard library, the SML Basis Library.
 - Ensure SML/NJ has been added to the path as appropriate for your architecture
 - Clone this repository and begin the tour!
+
+---
+
 ## The Tour
 This tour is intended to be followed at a Standard ML REPL. There are several files you may load, included in the repository, with some definitions.
 ```
@@ -17,10 +29,6 @@ a-tour-of-sml/ $ sml
 Standard ML of New Jersey v110.93 [built: Thu Sep 05 19:16:24 2019]
 - use "src/hello.sml";
 [opening src/hello.sml]
-[autoloading]
-[library $SMLNJ-BASIS/basis.cm is stable]
-[library $SMLNJ-BASIS/(basis.cm):basis-common.cm is stable]
-[autoloading done]
 structure Hello :
   sig
     val hello : unit -> unit
@@ -42,6 +50,8 @@ You may start up an environment with all of the examples loaded by compiling the
 Note: REPL examples are cleaned up slightly, such as removing the unit return value information. The text that appears in your REPL may differ somewhat, as a result.
 
 ---
+
+### Values
 The `val` keyword allows you to give a name to values.
 
 ```sml
@@ -68,8 +78,10 @@ val it = 1 : int
 - x;
 stdIn:13.1 Error: unbound variable or constructor: x
 ```
+Note that `val` gives a name to an immutable value. It is not a mutable/variable reference.
 
 ---
+### Functions
 Functions are declared using `fn`, and may be given a name with `val`. All functions take one argument and are curried. 
 ```sml
 - val inc = fn x => x + 1;
@@ -141,6 +153,8 @@ val it = () : unit
 
 ---
 
+### Modules
+
 Every Standard ML program is made up of modules. Here, we define a module named `Modules` by using the `structure` keyword:
 ```sml
 (* modules.sml *)
@@ -167,6 +181,7 @@ This program uses the modules `String`, `Int`, and `Random`.
 ```
 ---
 
+### Module signatures
 In Standard ML, modules expose all of their contents, but what is exported may be controlled by defining a signature for the module.
 
 ```sml
@@ -192,6 +207,8 @@ stdIn:38.1-38.8 Error: unbound variable or constructor: pi in path Math.pi
 Exercise: Fix the error by adding `pi` to the `sig` of `Math`, save, and reload the file in your REPL. Try to evaluate `Math.pi` again.
 
 ---
+
+### Signatures, continued
 
 Signatures do not necessarily need to be tied to a specific module. A signature may be defined separately, and have multiple implementations.
 
@@ -237,6 +254,8 @@ val it = "Valar morghulis.\n" : string
 
 ---
 
+### Parameterised modules
+
 Modules may accept other modules as parameters, including accepting a signature rather than a specific implementation. These are called functors, and declared using the `functor` keyword.
 
 ```sml
@@ -257,3 +276,86 @@ structure essosGreeter : sig val greet : unit -> unit end
 Valar morghulis.
 ```
 
+This allows you to depend on interfaces to modules rather than specific implementations, and to parameterise your dependency on modules rather than directly referencing them.
+
+---
+
+### Basic data types
+
+Standard ML has six data types built in:
+```sml
+(* Unit -- has only one value: () *)
+- val u = ();
+val u = () : unit
+
+(* Booleans : bool *)
+- val b = true;
+val b = true : bool
+
+(* Integers : int *)
+- val i = 1;
+val i = 1 : int
+
+(* Floating point numbers : real *)
+- val r = 2.0;
+val r = 2.0 : real
+
+(* Strings : string *)
+- val s = "s";
+val s = "s" : string
+
+(* ASCII Characters : char *)
+- val c = #"c";
+val c = #"c" : char
+```
+
+### Compound data types
+And three data structures:
+```sml
+(* Tuples *)
+- val tup = (1, 2);
+val tup = (1,2) : int * int
+
+(* Lists *)
+- val ls = [1, 2];
+val ls = [1,2] : int list
+
+(* Records *)
+- val recs = {a = 1, b = 2};
+val recs = {a=1,b=2} : {a:int, b:int}
+```
+
+Note that tuples are actually a special case of records with number labels: 
+```sml
+- {1 = "a", 2 = "b"} = ("a", "b");
+val it = true : bool
+```
+
+### Data type declarations
+New data types may be declared using the `datatype` keyword. 
+
+```sml
+- datatype card_suit = swords | wands | cups | disks;
+datatype card_suit = cups | disks | swords | wands
+- swords;
+val it = swords : card_suit
+- datatype card_value = prince | princess | knight | queen | one | two | three | four | five | six | seven | eight | nine | ten;
+```
+
+The data type `card_suit` consists of four exclusive cases, while `card_value` consists of 14. These datatypes may be parameterised by other types to hold additional information.
+
+```sml
+- datatype tarot_card = major_arcana of {name : string, number : int}
+=                     | minor_arcana of {suit : card_suit, value : card_value};
+datatype tarot_card
+  = major_arcana of {name:string, number:int}
+  | minor_arcana of {suit:card_suit, value:card_value}
+```
+Types may be both recursive and generic over other types. Lists illustrate both of these; the recursive definition of a list is: either it's an empty list, or it's an item followed by the rest of the (possibly empty) list. We make this generic over all items by adding a type parameter, `'item`.
+```
+- datatype 'item list = nil | cons of ('item * 'item list);
+datatype 'a list = cons of 'a * 'a list | nil
+
+- cons (3, cons (4, nil));
+val it = cons (3,cons (4,nil)) : int list
+```

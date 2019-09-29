@@ -1,6 +1,7 @@
 Group is
-  $/basis.cm
   $/smlnj-lib.cm
+  $cml/basis.cm
+  $cml/cml.cm
 
   src/hello.sml
   src/modules.sml
