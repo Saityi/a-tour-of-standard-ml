@@ -4,8 +4,9 @@ Group is
   $cml/cml.cm
 
   src/hello.sml
-  src/modules.sml
+  src/basictypes.sml
   src/functions.sml
+  src/modules.sml
   src/greeting.sig
   src/greeting1.sml
   src/greeting2.sml
