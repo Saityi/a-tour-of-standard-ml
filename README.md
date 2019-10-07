@@ -2,7 +2,7 @@
 
 ## What is Standard ML?
 
-Standard ML is a functional programming language with a reasonably small formal specification. It has static types to prevent a wide array of common errors, but also features powerful type inference, requiring few to no type declarations. It is easy to define new data types and structures, due to [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type), and write well-abstracted, easy to reason about code due to its powerful module system and [parametric polymorphism (generics)](https://en.wikipedia.org/wiki/Parametric_polymorphism).
+Standard ML is a functional programming language with a formal specification. It has static types to prevent a wide array of common errors, but also features powerful type inference, requiring few to no type declarations. It is easy to define new data types and structures, due to [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type), and write well-abstracted, easy to reason about code due to its powerful module system and [parametric polymorphism (generics)](https://en.wikipedia.org/wiki/Parametric_polymorphism).
 
 There are free, full-program optimising compilers for it, producing efficient native code, such as [MLton](http://www.mlton.org/). The concurrency extension 'Concurrent ML' provides support for [communicating sequential processes](https://en.wikipedia.org/wiki/Communicating_sequential_processes), and is supported by SML/NJ and MLton.
 
@@ -45,7 +45,7 @@ You may start up an environment with all of the examples loaded by compiling the
 
 Note: REPL examples are cleaned up slightly, such as removing the unit return value information. The text that appears in your REPL may differ somewhat, as a result.
 
-## Basics
+# Basics
 
 ## Modules, values, functions
 ### Values
@@ -358,7 +358,7 @@ datatype 'a list = cons of 'a * 'a list | nil
 val it = cons (3,cons (4,nil)) : int list
 ```
 
-## Flow Control
+## Programming in Standard ML (Flow Control)
 
 ### Pattern Matching
 
@@ -420,4 +420,124 @@ val greet_player = fn : player -> unit
 - greet_player (mage {name="Jaina", magic_type="arcane"});
 Greetings Jaina, master of the arcane
 val it = () : unit
+```
+
+### Conditional expressions
+
+Standard ML defines one conditional expression: 
+```sml
+- if true then 1 else 0;
+val it = 1 : int
+```
+You may define additional cases by chaining the if-else expressions
+```sml
+- if true
+= then ~1
+= else if true
+= then 0
+= else 1;
+val it = ~1 : int
+```
+
+Note that all branches of the if-else expression must have the same type.
+```sml
+- if true then () else 1;
+stdIn:16.1-16.23 Error: types of if branches do not agree [overload conflict]
+  then branch: unit
+  else branch: [int ty]
+  in expression:
+    if true then () else 1
+```
+
+### Iteration
+Iteration may be expressed using recursion, such as this function which pattern matches on the `list` type cases to recursively add a list:
+
+```sml
+- fun sum [] = 0
+=   | sum (x :: xs) = x + sum xs;
+val sum = fn : int list -> int
+- sum [1, 2, 3];
+val it = 6 : int
+```
+
+Standard ML automatically optimises tail recursive calls, so this will not explode the stack, regardless of the size of the list.
+
+You may frequently avoid direct recursion, by use of SML's rich set of higher-order functions:
+
+```sml
+(* Reduce a list of 'a into an item of type 'b using a combining function from ('a * 'b) -> 'b *)
+- foldl;
+val it = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b
+
+(* Use 'op' to refer to an infix operator as a prefix function *)
+- (op +);
+val it = fn : int * int -> int
+
+(* The same as 'sum' defined above! *)
+- foldl (op +) 0;
+val it = fn : int list -> int
+- val sum' = foldl (op +) 0;
+val sum' = fn : int list -> int
+- sum' [1, 2, 3];
+val it = 6 : int
+
+(* Transform all elements of a list *)
+- map (fn x => x + 1) [1, 1, 1];
+val it = [2,2,2] : int list
+
+(* Find an element in a list *)
+- List.find (fn x => x = 3) [];
+val it = NONE : int option
+- List.find (fn x => x = 3) [3];
+val it = SOME 3 : int option  
+```
+
+### Chaining effectful calls
+Although Standard ML is a functional, expression-based language, it makes it easy to do ['impure'](https://en.wikipedia.org/wiki/Pure_function) (side-effecting) operations like running several print statements in a row. To do so, just surround them with parenthesis and separate them by semicolons, as you might in some imperative languages:
+
+```sml
+- (print "Hello, "; print "world!"; print "\n");
+Hello, world!
+val it = () : unit
+```
+
+### Mutable references
+As noted previously, everything in Standard ML is immutable by default. `val` gives a name to a value. This is most commonly how SML is used, and mutability is rare. SML is a practical language, though, and since it may be useful sometimes to have a mutable reference, it gives you the capability to do so:
+
+```sml
+val x = ref 10 : int ref
+- val y = ref 20;
+val y = ref 20 : int ref
+- x := !x + !y;
+val it = () : unit
+- x;
+val it = ref 30 : int ref
+```
+
+You may define a reference using `ref`, get its value using `!` before the name, and set it using `:=`.
+
+Functions may even accept references as parameters, and this is reflected in the type system:
+
+```sml
+- fun ++ x = (x := !x + 1; !x);
+val ++ = fn : int ref -> int
+- val x = ref 0;
+val x = ref 0 : int ref
+- ++x;
+val it = 1 : int
+- x;
+val it = ref 1 : int ref
+```
+
+### Infinite loops
+You may encode an infinite loop using recursion:
+
+```sml
+fun forever () = forever ();
+val forever = fn : unit -> 'a
+- forever ();
+
+(* Ctrl+C *)
+Interrupt
+-
 ```
