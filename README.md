@@ -690,7 +690,7 @@ fun fib c q =
            )
         end
   in while not (!break) do
-        select 
+      select 
         [ wrap (sendEvt (c, !x), nextFib )
         , wrap (recvEvt q, fn _ => ( break := true
                                    ; print "quit\n" ))
