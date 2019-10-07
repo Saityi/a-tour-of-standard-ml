@@ -609,12 +609,18 @@ opening CML
 `spawn` creates  lightweight thread managed by the Concurrent ML runtime.
 
 ```sml
-- fun say s =
-  let val delay = Time.fromMilliseconds 100
-      val waitThenPrint = fn s => (OS.Process.sleep delay; print s)
-      val fiveTimes = Array.array (5, s)
-  in Array.app waitThenPrint fiveTimes
-  end;
+-   fun say s = 
+    let val delay = Time.fromMilliseconds 100
+        val waitThenPrint = fn () => 
+          ( OS.Process.sleep delay
+          ; print s
+          )
+        val i = ref 0
+    in while (!i) < 5 do
+         ( waitThenPrint ()
+         ; i := (!i) + 1
+         )
+    end
 val say = fn : string -> unit
 
 - fun main () =
@@ -643,29 +649,83 @@ Channels are a typed conduit through which you can send and receive values with 
 (* Send to channel ch *)
 - send (ch, v);
 (* Receive from ch and give it a name v *)
-- recv ch;
+- val v = recv ch;
 ```
 
 ```sml
 - fun sum s c = send (c, foldl (op +) 0 s);
 val it = fn : int list -> int chan -> unit
 
-- fun main () = let val s = [7, 2, 8, ~9, 4, 0]
-                    val ch = channel ()
-                    val slen = (List.length s div 2)
-                in ( spawn (fn () => sum (List.take (s, slen)) ch)
-                   ; spawn (fn () => sum (List.drop (s, slen)) ch)
-                   ; let val x = recv ch
-                         val y = recv ch
-                     in ( print (Int.toString x)
-                        ; print " "
-                        ; print (Int.toString y)
-                        ; print " "
-                        ; print (Int.toString (x + y))
-                        ; print "\n")
-                     end
-                   )
-                end;
+- fun main () = 
+    let val s = [7, 2, 8, ~9, 4, 0]
+        val ch = channel ()
+        val slen = (List.length s div 2)
+        val x = ref 0
+        val y = ref 0
+    in ( spawn (fn () => sum (List.take (s, slen)) ch)
+       ; spawn (fn () => sum (List.drop (s, slen)) ch)
+       ; x := recv ch
+       ; y := recv ch
+       ; print (Int.toString (!x)) ; print " "
+       ; print (Int.toString (!y)) ; print " "
+       ; print (Int.toString (!x + !y)) ; print "\n"
+       )
+    end
 - RunCML.doit (main, NONE);
 17 ~5 12
+```
+
+### Select
+`select` lets a thread wait on a list of communication events. 
+
+```sml
+fun fib c q =
+  let val x = ref 0
+      val y = ref 1
+      val break = ref false
+      val nextFib = fn x' =>
+        let val tmp = !x
+        in ( x := !y
+           ; y := tmp + (!y)
+           )
+        end
+  in while not (!break) do
+        select 
+        [ wrap (sendEvt (c, !x), nextFib )
+        , wrap (recvEvt q, fn _ => ( break := true
+                                    ; print "quit\n" ))
+        ]
+  end
+
+fun print_channel c q =
+  let val i = ref 0
+  in ( while (!i) < 10 do
+          ( print (Int.toString (recv c)); print "\n"
+          ; i := (!i) + 1
+          )
+      ; send (q, true)
+      )
+  end
+
+fun main () =
+  let val c : int chan = channel ()
+      val q : bool chan = channel ()
+  in ( spawn (fn () => print_channel c q)
+      ; fib c q 
+      )
+  end
+
+- RunCML.doit(main, NONE);
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+quit
+val it = 1 : OS.Process.status
 ```

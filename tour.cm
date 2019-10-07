@@ -12,3 +12,4 @@ Group is
   src/greeting2.sml
   src/greeter.sml
   src/datatypes.sml
+  src/concurrency.sml
