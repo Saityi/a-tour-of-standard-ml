@@ -711,8 +711,8 @@ fun main () =
   let val c : int chan = channel ()
       val q : bool chan = channel ()
   in ( spawn (fn () => print_channel c q)
-      ; fib c q 
-      )
+     ; fib c q 
+     )
   end
 
 - RunCML.doit(main, NONE);
