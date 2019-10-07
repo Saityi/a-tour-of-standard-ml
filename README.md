@@ -93,9 +93,17 @@ val b = true : bool
 - val i = 1;
 val i = 1 : int
 
+(* Note that negation is performed using a tilde *)
+- ~1;
+val it = ~1 : int;
+
 (* Floating point numbers : real *)
 - val r = 2.0;
 val r = 2.0 : real
+
+(* Note that negation is performed using a tilde *)
+- ~2.0;
+val it = ~2.0 : real;
 
 (* Strings : string *)
 - val s = "s";
@@ -104,6 +112,39 @@ val s = "s" : string
 (* ASCII Characters : char *)
 - val c = #"c";
 val c = #"c" : char
+```
+
+### Compound data types
+Standard ML has three built-in data structures:
+```sml
+(* Tuples *)
+- val tup = (1, 2);
+val tup = (1,2) : int * int
+
+(* Lists *)
+- val ls = [1, 2];
+val ls = [1,2] : int list
+
+(* Records *)
+- val recs = {a = 1, b = 2};
+val recs = {a=1,b=2} : {a:int, b:int}
+```
+
+Note that records are not associative maps from arbitrary keys to values. Record fields may only be numbers or labels.
+```sml
+(* Arbitrary values, such as strings, may not be used as fields *)
+- {"a"=1};
+stdIn:3.2-3.6 Error: syntax error: deleting  STRING EQUALOP
+- {a=1};
+val it = {a=1} : {a:int}
+- {1=1} ;
+val it = {1=1} : {1:int}
+```
+
+Tuples are actually a special case of records with number labels: 
+```sml
+- {1 = "a", 2 = "b"} = ("a", "b");
+val it = true : bool
 ```
 
 ### Functions
@@ -296,39 +337,6 @@ Valar morghulis.
 
 This allows you to depend on interfaces to modules rather than specific implementations, and to parameterise your dependency on modules rather than directly referencing them.
 
-### Compound data types
-And three data structures:
-```sml
-(* Tuples *)
-- val tup = (1, 2);
-val tup = (1,2) : int * int
-
-(* Lists *)
-- val ls = [1, 2];
-val ls = [1,2] : int list
-
-(* Records *)
-- val recs = {a = 1, b = 2};
-val recs = {a=1,b=2} : {a:int, b:int}
-```
-
-Note that records are not maps. Record fields may be numbers or labels.
-```sml
-(* Arbitrary values, such as strings, may not be used as fields *)
-- {"a"=1};
-stdIn:3.2-3.6 Error: syntax error: deleting  STRING EQUALOP
-- {a=1};
-val it = {a=1} : {a:int}
-- {1=1} ;
-val it = {1=1} : {1:int}
-```
-
-Tuples are actually a special case of records with number labels: 
-```sml
-- {1 = "a", 2 = "b"} = ("a", "b");
-val it = true : bool
-```
-
 ### Data type declarations
 New data types may be declared using the `datatype` keyword. 
 
@@ -350,13 +358,17 @@ datatype tarot_card
   | minor_arcana of {suit:card_suit, value:card_value}
 ```
 Types may be both recursive and generic over other types. Lists illustrate both of these; the recursive definition of a list is: either it's an empty list, or it's an item followed by the rest of the (possibly empty) list. We make this generic over all items by adding a type parameter, `'item`.
-```
+```sml
 - datatype 'item list = nil | cons of ('item * 'item list);
 datatype 'a list = cons of 'a * 'a list | nil
 
 - cons (3, cons (4, nil));
 val it = cons (3,cons (4,nil)) : int list
 ```
+
+The standard library defines several more structures, including arrays, array slices, and vectors:
+
+http://sml-family.org/Basis/overview.html
 
 ## Programming in Standard ML (Flow Control)
 
@@ -540,4 +552,72 @@ val forever = fn : unit -> 'a
 (* Ctrl+C *)
 Interrupt
 -
+```
+
+## Concurrency
+
+### Spawn
+
+`spawn` creates  lightweight thread managed by the Concurrent ML runtime.
+
+```sml
+- fun say s =
+  let val delay = Time.fromMilliseconds 100
+      val waitThenPrint = fn s => (OS.Process.sleep delay; print s)
+      val fiveTimes = Array.array (5, s)
+  in Array.app waitThenPrint fiveTimes
+  end;
+val say = fn : string -> unit
+
+- fun main () =
+  ( CML.spawn (fn () => say "World!\n")
+  ; say "Hello!\n" );
+val main = fn : unit -> unit
+
+- RunCML.doit (main, NONE);
+Hello!
+World!
+World!
+Hello!
+Hello!
+World!
+World!
+Hello!
+Hello!
+World!
+```
+
+### Channels
+
+Channels are a typed conduit through which you can send and receive values with the channel `send` and `recv` functions.
+
+```sml
+(* Send to channel ch *)
+- CML.send (ch, v);
+(* Receive from ch and give it a name v *)
+- CML.recv ch;
+```
+
+```sml
+- fun sum s c = send (c, foldl (op +) 0 s);
+val it = fn : int list -> int chan -> unit
+
+- fun main () = let val s = [7, 2, 8, ~9, 4, 0]
+                    val ch = channel ()
+                    val slen = (List.length s div 2)
+                in ( spawn (fn () => sum (List.take (s, slen)) ch)
+                   ; spawn (fn () => sum (List.drop (s, slen)) ch)
+                   ; let val x = recv ch
+                         val y = recv ch
+                     in ( print (Int.toString x)
+                        ; print " "
+                        ; print (Int.toString y)
+                        ; print " "
+                        ; print (Int.toString (x + y))
+                        ; print "\n")
+                     end
+                   )
+                end;
+- RunCML.doit (main, NONE);
+17 ~5 12
 ```
