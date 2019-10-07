@@ -55,21 +55,21 @@ structure Concurrency = struct
                                        ; print "quit\n" ))]
       end
 
-      fun print_channel c q =
-        let val i = ref 0
-        in ( while (!i) < 10 do
-               ( print (Int.toString (recv c)); print "\n"
-               ; i := (!i) + 1
-               )
-           ; send (q, true)
-           )
-        end
+    fun print_channel c q =
+      let val i = ref 0
+      in ( while (!i) < 10 do
+              ( print (Int.toString (recv c)); print "\n"
+              ; i := (!i) + 1
+              )
+          ; send (q, true)
+          )
+      end
 
-      fun fib_main () =
-        let val c : int chan = channel ()
-            val q : bool chan = channel ()
-        in ( spawn (fn () => print_channel c q)
-           ; fib c q 
-           )
-        end
+    fun fib_main () =
+      let val c : int chan = channel ()
+          val q : bool chan = channel ()
+      in ( spawn (fn () => print_channel c q)
+         ; fib c q 
+         )
+      end
 end

@@ -606,7 +606,7 @@ opening CML
 
 ### Spawn
 
-`spawn` creates  lightweight thread managed by the Concurrent ML runtime.
+`spawn` creates a lightweight thread managed by the Concurrent ML runtime.
 
 ```sml
 - fun say s = 
@@ -675,6 +675,8 @@ val it = fn : int list -> int chan -> unit
 17 ~5 12
 ```
 
+Note that `send` is a blocking operation. It will not return until another thread attempts to `recv`.
+
 ### Select
 `select` lets a thread wait on a list of communication events. 
 
@@ -729,3 +731,76 @@ fun main () =
 quit
 val it = 1 : OS.Process.status
 ```
+
+### Mailboxes
+
+If the previous section we used synchronous channels, but CML provides asynchronous channels with a nonblocking `send`, called Mailboxes:
+
+```sml
+- open Mailbox;
+- val m : int mbox = mailbox ();
+- send (m, 10);
+val it = () : unit
+- m;
+val it = MB (ref (NONEMPTY (1,{front=#,rear=#}))) : int mbox
+- recv m;
+val it = 10 : int
+
+### M and I-variables
+
+Sometimes you may need threadsafe, mutable variables. Concurrent ML provides them in two flavours:
+
+#### I-variables
+
+An `ivar` may be in one of two states: empty, or full. An `ivar` may be written once, and provides synchronisation on reads. Once written, the `ivar` is full, and further writes are an error:
+
+```sml
+- val i : int ivar = iVar ();
+val i = - : int ivar
+- iPut (i, 10);
+val it = () : unit
+- iPut (i, 10);
+
+uncaught exception Put
+  raised at: cml/src/core-cml/sync-var.sml:142.42-142.45
+```
+
+As a value may not be put yet, there is a nonblocking operation that returns an option:
+
+```sml
+- val j : int ivar = iVar ();
+val j = - : int ivar
+- iGetPoll j;
+val it = NONE : int option
+- iPut (j, 0);
+val it = () : unit
+- iGetPoll j;
+val it = SOME 0 : int option
+```
+
+I-variables work with the event framework of CML, and thus may be an event source for threads to `select` upon, if used with `iGetEvt`.
+
+#### M-variables
+
+M-variables are much like I-variables, but may be written to multiple times. Writing to a full M-Variable is an error, but taking from an `mvar` clears its contents. You may get an M-Variable without clearing its contents using `mGet`, or with clearing its contents using `mTake`.
+
+```sml
+- val i : int mvar = mVar ();
+val i = - : int mvar
+- mPut (i, 10);
+val it = () : unit
+- mGet i;
+val it = 10 : int
+- mPut (i, 10);
+
+uncaught exception Put
+  raised at: cml/src/core-cml/sync-var.sml:203.42-203.45
+- mTake i;
+val it = 10 : int
+- mPut (i, 0);
+val it = () : unit
+- mGet i;
+val it = 0 : int
+```
+
+M-variables provide similar integration with the event framework as I-variables.
