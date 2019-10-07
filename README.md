@@ -601,7 +601,7 @@ opening CML
   val select : 'a event list -> 'a
   val timeOutEvt : Time.time -> unit event
   val atTimeEvt : Time.time -> unit event
-  ```
+```
 
 
 ### Spawn
@@ -734,7 +734,7 @@ val it = 1 : OS.Process.status
 
 ### Mailboxes
 
-If the previous section we used synchronous channels, but CML provides asynchronous channels with a nonblocking `send`, called Mailboxes:
+In the previous section we used synchronous channels, but CML provides asynchronous channels with a nonblocking `send`, called Mailboxes:
 
 ```sml
 - open Mailbox;
@@ -745,6 +745,9 @@ val it = () : unit
 val it = MB (ref (NONEMPTY (1,{front=#,rear=#}))) : int mbox
 - recv m;
 val it = 10 : int
+- m;
+val it = MB (ref (EMPTY {front=[],rear=[]})) : int mbox
+```
 
 ### M and I-variables
 
