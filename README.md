@@ -609,7 +609,7 @@ opening CML
 `spawn` creates  lightweight thread managed by the Concurrent ML runtime.
 
 ```sml
--   fun say s = 
+- fun say s = 
     let val delay = Time.fromMilliseconds 100
         val waitThenPrint = fn () => 
           ( OS.Process.sleep delay
