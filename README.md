@@ -693,7 +693,7 @@ fun fib c q =
         select 
         [ wrap (sendEvt (c, !x), nextFib )
         , wrap (recvEvt q, fn _ => ( break := true
-                                    ; print "quit\n" ))
+                                   ; print "quit\n" ))
         ]
   end
 
