@@ -1,0 +1,36 @@
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
+src/.cm
+
+# Ignore swap files and stack/cabal output.
+*.hi
+*.o
+*.swo
+*.swp
+*~
+*.lock
+.DS_Store
+TAGS
+dist
+tags
+cabal.sandbox.config
+.cabal-sandbox/
+.stack-work
+
+# Ignore test builds.
+tests/Main
+_cache
+_store
+_site
+
+# Rest of the file: ignore examples
+web/_cache
+web/_site
+web/site
+web/reference
+
+# This is generated from the CHANGELOG
+web/releases.markdown

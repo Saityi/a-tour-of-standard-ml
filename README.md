@@ -22,26 +22,13 @@ a-tour-of-sml/ $ sml
 ```
 ```sml
 (* REPL *)
-Standard ML of New Jersey v110.93 [built: Thu Sep 05 19:16:24 2019]
-- use "src/hello.sml";
-[opening src/hello.sml]
-structure Hello :
-  sig
-    val hello : unit -> unit
-    val main : 'a * 'b -> Word32.word
-  end
+Standard ML of New Jersey v110.93
+- use "examples/00-01-hello.sml";
+[opening examples/00-01-hello.sml]
+Hello, world!
 val it = () : unit
-- Hello.hello ();
-Hello!
 ```
 `it` always contains the value of the last expression evaluated in the REPL.
-
-You may start up an environment with all of the examples loaded by compiling the defintions in SML/NJ `.cm` file.
-
-```sml
-(* REPL *)
-- CM.make "tour.cm";
-```
 
 Note: REPL examples are cleaned up slightly, such as removing the unit return value information. The text that appears in your REPL may differ somewhat, as a result.
 
@@ -57,8 +44,8 @@ val i = 10 : int
 ```
 Values may be given explicit type declarations, but they are not required.
 ```sml
-- val i: real = 10.0;
-val i = 10.0 : real
+- val j: real = 10.0;
+val j = 10.0 : real
 ```
 It is possible to name multiple values at once to be used in some expression
 ```sml
@@ -75,6 +62,11 @@ val it = 1 : int
 - x;
 stdIn:13.1 Error: unbound variable or constructor: x
 ```
+Equality is tested using `=`
+```sml
+val _ = i = k (* true *)
+```
+
 Note that `val` gives a name to an immutable value. It is not a mutable/variable reference.
 
 ### Basic data types
@@ -118,19 +110,23 @@ val c = #"c" : char
 Standard ML has three built-in data structures:
 ```sml
 (* Tuples *)
-- val tup = (1, 2);
-val tup = (1,2) : int * int
+val t : (int * int) = 
+    (1, 2)
 
 (* Lists *)
-- val ls = [1, 2];
-val ls = [1,2] : int list
+val l : int list = 
+    [1, 2, 3]
 
 (* Records *)
-- val recs = {a = 1, b = 2};
-val recs = {a=1,b=2} : {a:int, b:int}
-```
+val r : {name:string, occupation:string} = 
+    {name="Zaphod Beeblebrox", occupation="President of the Galaxy"}
 
-Note that records are not associative maps from arbitrary keys to values. Record fields may only be numbers or labels.
+(* Fields of records may be accessed using #field record *)
+
+val _ = #1 t (* 1 *)
+val _ = #occupation r (* "President of the Galaxy" *)
+```
+Note that records are not associative maps (dictionaries); the label fields of records may only be an alphanumeric name, or a number greater than 0. 
 ```sml
 (* Arbitrary values, such as strings, may not be used as fields *)
 - {"a"=1};
@@ -141,7 +137,7 @@ val it = {a=1} : {a:int}
 val it = {1=1} : {1:int}
 ```
 
-Tuples are actually a special case of records with number labels: 
+Tuples are a special case of records with number labels: 
 ```sml
 - {1 = "a", 2 = "b"} = ("a", "b");
 val it = true : bool
@@ -168,7 +164,7 @@ As the single argument `fn` form is harder to work with, there is syntactic suga
 - fun add' x y = x + y;
 val add' = fn : int -> int -> int
 ```
-Type declarations are not required, as Standard ML features powerful type inference, but may be provided. If provided, they must be surrounded by parenthesis.
+Type declarations are not required, as Standard ML features type inference, but may be provided. If provided, they must be surrounded by parenthesis.
 ```sml
 - fun sub (x: int) (y: int) = x - y;
 val sub = fn : int -> int -> int
@@ -189,6 +185,12 @@ Standard ML has tuples, so functions may return any number of results.
 val divmod = fn : int -> int -> int * int
 ```
 
+You may refer to an operator using `op`
+
+```sml
+val add' = (op +)
+```
+
 While all functions take one argument, you may not need one, such as a in function that produces side effects, but requires no input. To write such a function, you use a `unit` argument. `unit` is a type with only one value, `()`. 
 ```sml
 - fun printExample () = print (Int.toString (add 42 13));
@@ -199,20 +201,15 @@ val it = () : unit
 In Standard ML, everything must produce a value, so side-effecting functions return `unit`, as well. This may be seen when you call the `use` function to load the functions module:
 ```sml
 (* REPL *)
-- use "functions.sml";
-[opening functions.sml]
-structure Functions :
-  sig
-    val inc : int -> int
-    val add : int -> int -> int
-    val inc' : int -> int
-    val add' : int -> int -> int
-    val sub : int -> int -> int
-    val mul : int * int -> int
-    val div' : int * int -> int
-    val divmod : int -> int -> int * int
-    val printExample : unit -> unit
-  end
+- use "examples/01-05-fun.sml";
+[opening examples/01-05-fun.sml]
+val add = fn : int -> int -> int
+val sub = fn : int -> int -> int
+val mul = fn : int * int -> int
+val divide = fn : int * int -> int
+val divmod = fn : int * int -> int * int
+val printExample = fn : unit -> unit
+val add' = fn : int * int -> int
 val it = () : unit
 ```
 `use` returns `() : unit` after opening the file.
@@ -221,7 +218,7 @@ val it = () : unit
 
 Every Standard ML program is composed of modules. Modules group together a set of definitions. Here, we define a module named `Modules` by using the `structure` keyword, with one definition, `fun favouriteNum ()`:
 ```sml
-(* modules.sml *)
+(* examples/01-06-modules.sml *)
 structure Modules = struct
   open String
   structure R = Random
@@ -240,7 +237,7 @@ This program uses the modules `String`, `Int`, and `Random`.
 - `Int` is used directly.
 ```sml
 (* REPL *)
-- use "modules.sml";
+- use "examples/01-06-modules.sml";
 - Modules.favouriteNum ();
 ```
 
@@ -248,7 +245,7 @@ This program uses the modules `String`, `Int`, and `Random`.
 In Standard ML, modules expose all of their contents by default, but what is exported may be controlled by defining a signature of the exports for the module.
 
 ```sml
-(* signatures.sml *)
+(* examples/01-07-signatures.sml *)
 structure Math : sig
   val e : real
 end = struct
@@ -257,8 +254,7 @@ end = struct
 end
 
 (* REPL *)
-- use "signatures.sml";
-[opening signatures.sml]
+- use "examples/01-07-signatures.sml";
 structure Math : sig val e : real end
 
 - Math.e;
@@ -267,50 +263,35 @@ structure Math : sig val e : real end
 stdIn:38.1-38.8 Error: unbound variable or constructor: pi in path Math.pi
 ```
 
-Exercise: Fix the error by adding `pi` to the `sig` of `Math`, save, and reload the file in your REPL. Try to evaluate `Math.pi` again.
-
 ### Signatures, continued
 
 Signatures do not necessarily need to be tied to a specific module. A signature may be defined separately, and have multiple implementations.
 
 ```sml
-(* greeting.sig *)
+(* examples/01-08-signatures.sml *)
 signature GREETING = sig
   val greeting : string
 end
 
-(* greeting1.sml *)
-structure EnglishGreeting :> GREETING = struct
+structure EnglishGreeting : GREETING = struct
   val greeting = "Hello.\n"
 end
 
-(* greeting2.sml *)
-structure ValyrianGreeting :> GREETING = struct
+structure ValyrianGreeting : GREETING = struct
   val greeting = "Valar morghulis.\n"
 end
+
+val _ = print EnglishGreeting.greeting
+val _ = print ValyrianGreeting.greeting
 ```
 
 Signatures, by convention, are `UPPERCASE`.
 
 ```sml
 (* REPL *)
-- use "src/greeting.sig";
-[opening src/greeter.sig]
-signature GREETING = sig val greeting : string end
-
-- use "src/greeting1.sml";
-[opening src/greeter1.sml]
-structure EnglishGreeting : GREETING
-
-- use "src/greeting2.sml";
-[opening src/greeter2.sml]
-structure ValyrianGreeting : GREETING
-
-- EnglishGreeting.greeting;
-val it = "Hello.\n" : string
-
-- ValyrianGreeting.greeting;
-val it = "Valar morghulis.\n" : string
+- use "examples/01-08-signatures.sml";
+Hello.
+Valar morghulis.
 ```
 
 ### Parameterised modules
@@ -318,26 +299,44 @@ val it = "Valar morghulis.\n" : string
 Modules may accept other modules as parameters, including accepting a signature rather than a specific implementation. These are called functors, and declared using the `functor` keyword.
 
 ```sml
-(* greeter.sml *)
+(* examples/01-09-functors.sml *)
+signature GREETING = sig
+  val greeting : string
+end
+
 functor Greeter (G : GREETING) = struct
   fun greet () = print G.greeting
 end
 
-(* REPL *)
-- structure englishGreeter = Greeter(EnglishGreeting);
-structure englishGreeter : sig val greet : unit -> unit end
-- englishGreeter.greet ();
-Hello.
+structure EnglishGreeting : GREETING = struct
+  val greeting = "Hello.\n"
+end
 
-- structure essosGreeter = Greeter(ValyrianGreeting);
-structure essosGreeter : sig val greet : unit -> unit end
-- essosGreeter.greet ();
+structure ValyrianGreeting : GREETING = struct
+  val greeting = "Valar morghulis.\n"
+end
+
+structure englishGreeter = Greeter(EnglishGreeting)
+structure essosGreeter = Greeter(ValyrianGreeting)
+
+val _ = englishGreeter.greet ()
+val _ = essosGreeter.greet ()
+
+(* REPL *)
+- use "examples/01-09-functors.sml";
+Hello.
 Valar morghulis.
 ```
 
 This allows you to depend on interfaces to modules rather than specific implementations, and to parameterise your dependency on modules rather than directly referencing them.
 
 ### Data type declarations
+
+Type aliases may be defined using the `type` keyword.
+```sml
+type major_arcana_card = (string * int)
+```
+
 New data types may be declared using the `datatype` keyword. 
 
 ```sml
@@ -351,19 +350,39 @@ val it = swords : card_suit
 The data type `card_suit` consists of four exclusive cases, while `card_value` consists of 14. These datatypes may be parameterised by other types to hold additional information.
 
 ```sml
-- datatype tarot_card = major_arcana of {name : string, number : int}
-=                     | minor_arcana of {suit : card_suit, value : card_value};
-datatype tarot_card
-  = major_arcana of {name:string, number:int}
-  | minor_arcana of {suit:card_suit, value:card_value}
-```
-Types may be both recursive and generic over other types. Lists illustrate both of these; the recursive definition of a list is: either it's an empty list, or it's an item followed by the rest of the (possibly empty) list. We make this generic over all items by adding a type parameter, `'item`.
-```sml
-- datatype 'item list = nil | cons of ('item * 'item list);
-datatype 'a list = cons of 'a * 'a list | nil
+datatype minor_arcana_card = minor_arcana_card of {suit: card_suit, value: card_value}
 
-- cons (3, cons (4, nil));
-val it = cons (3,cons (4,nil)) : int list
+datatype tarot_card = major_arcana of major_arcana_card
+                    | minor_arcana of minor_arcana_card
+```
+
+### Recursive data types
+Types may be recursive, making it easy to define recursive data structures like lists or trees. For example, a list of `'a`s is either:
+
+- empty
+  * `nil`
+- or an item of type `'a`, followed by the rest of the list of `'a`s, which may be empty
+  * `:: of 'a * 'a list`
+
+```sml
+(* examples/01-11-recursive-datatypes.sml *)
+datatype 'a list = nil 
+                 | :: of 'a * 'a list
+```
+
+A binary tree could be defined as:
+
+- A `leaf`
+- Or a `node`, containing an item of type `'a` and two subtrees
+ 
+```sml
+datatype 'a tree = leaf
+                 | node of ('a * 'a tree * 'a tree)
+
+val _ = 1 :: 2 :: 3 :: nil
+val _ = node (1, 
+              node (2, leaf, leaf), 
+              node (2, leaf, leaf)
 ```
 
 The standard library defines several more structures, including arrays, array slices, and vectors:
@@ -374,64 +393,66 @@ http://sml-family.org/Basis/overview.html
 
 ### Pattern Matching
 
-Standard ML allow you to pattern match on values, providing case anaylsis:
+Standard ML allow you to pattern match on values, providing case anaylsis. Using the `list` previously defined, we could pattern match on its cases and apply a function to each value in the list.
 
 ```sml
-- datatype rock_paper_scissors = rock | paper | scissors;
-
-- fun beats throw =
-=   case throw of
-=     scissors => paper
-=   | rock     => scissors
-=   | paper    => rock;
-
-(* Or, equivalently *)
-- fun beats' scissors = paper
-=   | beats' rock     = scissors
-=   | beats' paper    = rock;
-- beats scissors;
-val it = paper : rock_paper_scissors
-- beats' rock;
-val it = scissors : rock_paper_scissors
+fun map f xs =
+  case xs of
+    nil     => nil
+  | x :: xs => 
+    let val x'  = f x
+        val xs' = map f xs
+    in x' :: xs'
+    end
 ```
 
-Along with exhaustivity checking (making sure all cases of a data type are handled). Here, we get a warning that we haven't handled the other two cases of `rock_paper_scissors`, `rock` and `paper`.
+- If the list is empty there's nothing to do: return the empty list.
+  * `case xs of nil => nil`
+- If the list has an item, `x`: 
+  * apply `f` to `x` to produce `x'`
+  * apply `map f` to the rest of the list `xs` to produce `xs'`
+  * create a new list of the transformed item, `x'`, and the transformed rest of the list, `xs'`
+    * `x' :: xs'`
+
+It's possible to pattern match directly in the function definition and avoid the intermediate values to make it less verbose, as in `map'`.
 
 ```sml
-- fun inexhaustive scissors = scissors;
-stdIn:21.5-21.37 Warning: match nonexhaustive
-          scissors => ...
-
-val inexhaustive = fn : rock_paper_scissors -> rock_paper_scissors
+fun map' f nil       = nil
+  | map' f (x :: xs) = f x :: map' f xs
 ```
 
-As well as deconstruction of data types, allowing you to extract values from the constructors that make up some data type. You may use pattern matching with `val` to extract values directly:
+SML exhaustivity checking (making sure all cases of a data type are handled) on data types. Here, we get a warning that we haven't handled the recursive case of a list having items.
+
+```sml
+fun inexhaustive nil = nil
+
+(*
+ * 02-01-exhaustive.sml:1.6-1.28 Warning: match nonexhaustive
+            nil => ... *)
+```
+
+Standard ML allows you to deconstruct values using the `val` keyword, as well, in place of using the `case` construct.
+
 ```sml
 - val (x, y) = (1, 2);
 val x = 1 : int
 val y = 2 : int
 ```
 
-Or use `case` or pattern-matching function definitions:
+All of these together makes it easy to express your problem as a set of cases, which you can then decompose and compose to write your logic.
 
 ```sml
+open String
 
 datatype player = mage of {name: string, magic_type: string}
-=               | warrior of {name: string, weapon: string};
-datatype player
-  = mage of {magic_type:string, name:string}
-  | warrior of {name:string, weapon:string}
+                | warrior of {name: string, weapon: string}
 
-(* Pattern match on the player constructors to extract their fields *)
-- fun greet_player (mage {name=name, magic_type=magic_type}) = 
-    print ("Greetings " ^ name ^ ", master of the " ^ magic_type ^ "\n")
-=   | greet_player (warrior {name=name, weapon=weapon})      = 
-    print ("Hullo " ^ name ^ ", wielder of " ^ weapon ^ "\n");
-val greet_player = fn : player -> unit
+fun greet_player (mage {name=name, magic_type=magic_type}) =
+    print ("Greetings, " ^ name ^ ", master of the " ^ magic_type ^ "!\n")
+  | greet_player (warrior {name=name, weapon=weapon}) =
+    print ("Hullo, " ^ name ^ ", wielder of " ^ weapon ^ "!\n")
 
-- greet_player (mage {name="Jaina", magic_type="arcane"});
-Greetings Jaina, master of the arcane
-val it = () : unit
+val _ = greet_player (warrior {name="Grom", weapon="Gorehowl"})
 ```
 
 ### Conditional expressions
@@ -441,14 +462,15 @@ Standard ML defines one conditional expression:
 - if true then 1 else 0;
 val it = 1 : int
 ```
+
 You may define additional cases by chaining the if-else expressions
 ```sml
-- if true
-= then ~1
-= else if true
-= then 0
-= else 1;
-val it = ~1 : int
+val _ =
+  if (1 = 0)
+  then 1
+  else if (1 = 1)
+  then ~1
+  else 0;
 ```
 
 Note that all branches of the if-else expression must have the same type.
@@ -474,38 +496,32 @@ val it = 6 : int
 
 Standard ML automatically optimises tail recursive calls, so this will not explode the stack, regardless of the size of the list.
 
-You may frequently avoid direct recursion, by use of SML's rich set of higher-order functions:
+You may frequently avoid direct recursion by use of higher-order functions: pass in a function to another function, which then handles the details of iteration or aggregation using your passed in the function. Examples include:
+
+- `map f xs`, which applies a function `f` to each element in `xs`, creating a new list
+- `List.filter p xs`, which filters a list using a predicate `p`, creating a new list containing any items that returned `true` for `p x`
+- `foldr c s xs` lets you combine the items of a list to a summary value, using some combining operation `c` and a starting value `s`
 
 ```sml
-(* Reduce a list of 'a into an item of type 'b using a combining function from ('a * 'b) -> 'b *)
-- foldl;
-val it = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b
+val _ = map (fn x => x + 1) [1, 1, 1] (* [2, 2, 2] *)
+val _ = List.filter (fn x => x mod 2 = 0) [1, 2, 3] (* [2] *)
+```
 
-(* Use 'op' to refer to an infix operator as a prefix function *)
-- (op +);
-val it = fn : int * int -> int
+### Infinite loops
+You may encode an infinite loop using recursion:
 
-(* The same as 'sum' defined above! *)
-- foldl (op +) 0;
-val it = fn : int list -> int
-- val sum' = foldl (op +) 0;
-val sum' = fn : int list -> int
-- sum' [1, 2, 3];
-val it = 6 : int
+```sml
+fun forever () = forever ();
+val forever = fn : unit -> 'a
+- forever ();
 
-(* Transform all elements of a list *)
-- map (fn x => x + 1) [1, 1, 1];
-val it = [2,2,2] : int list
-
-(* Find an element in a list *)
-- List.find (fn x => x = 3) [];
-val it = NONE : int option
-- List.find (fn x => x = 3) [3];
-val it = SOME 3 : int option  
+(* Ctrl+C *)
+Interrupt
+-
 ```
 
 ### Chaining effectful calls
-Although Standard ML is a functional, expression-based language, it makes it easy to do ['impure'](https://en.wikipedia.org/wiki/Pure_function) (side-effecting) operations like running several print statements in a row. To do so, just surround them with parenthesis and separate them by semicolons, as you might in some imperative languages:
+In Standard ML, everything is an expression which returns a result, but you may chain multiple expressions in an imperative-like form for their side effects by separating them by semicolons. The result of these chains is the last expression in the block.
 
 ```sml
 - (print "Hello, "; print "world!"; print "\n");
@@ -514,7 +530,7 @@ val it = () : unit
 ```
 
 ### Mutable references
-As noted previously, everything in Standard ML is immutable by default. `val` gives a name to a value. This is most commonly how SML is used, and mutability is rare. SML is a practical language, though, and since it may be useful sometimes to have a mutable reference, it gives you the capability to do so:
+As noted previously, everything in Standard ML is immutable by default. `val` gives a name to a value. This is most commonly how SML is used, and mutability is rare. It may be useful sometimes to have a mutable reference, so SML does provide the capability to do so.
 
 ```sml
 val x = ref 10 : int ref
@@ -540,18 +556,20 @@ val it = 1 : int
 - x;
 val it = ref 1 : int ref
 ```
+### While loops
+Standard ML has a `while` loop defined which may be used in place of recursion or higher order functions, wherein one expression is repeated while a condition holds.
 
-### Infinite loops
-You may encode an infinite loop using recursion:
+Recursion and higher order functions tend to be preferred, as `while` only makes sense with a mutable condition, and Standard ML tends to prefer immutability.
 
 ```sml
-fun forever () = forever ();
-val forever = fn : unit -> 'a
-- forever ();
+val x = ref 0
 
-(* Ctrl+C *)
-Interrupt
--
+val _ =
+  while (!x) <> 10 do (
+    x := !x + 1;
+    print (Int.toString (!x));
+    print "\n"
+  )
 ```
 
 ## Concurrency
@@ -609,26 +627,30 @@ opening CML
 `spawn` creates a lightweight thread managed by the Concurrent ML runtime.
 
 ```sml
-- fun say s = 
-    let val delay = Time.fromMilliseconds 100
-        val waitThenPrint = fn () => 
-          ( OS.Process.sleep delay
-          ; print s
-          )
-        val i = ref 0
-    in while (!i) < 5 do
-         ( waitThenPrint ()
-         ; i := (!i) + 1
-         )
-    end
-val say = fn : string -> unit
+(* examples/03-01-spawn.sml *)
+open CML
+open TextIO
 
-- fun main () =
-  ( spawn (fn () => say "World!\n")
-  ; say "Hello!\n" );
-val main = fn : unit -> unit
+fun say s = 
+  let val delay = Time.fromMilliseconds 100
+      val waitThenPrint = fn () => ( 
+          OS.Process.sleep delay; 
+          print s
+        )
+      val i = ref 0
+  in while (!i) < 5 do ( 
+      waitThenPrint (); 
+      i := (!i) + 1
+  )
+  end
 
-- RunCML.doit (main, NONE);
+fun main () = ( 
+    spawn (fn () => say "World!\n");
+    say "Hello!\n"
+)
+
+val _ = RunCML.doit (main, NONE)
+(*
 Hello!
 World!
 World!
@@ -639,6 +661,7 @@ World!
 Hello!
 Hello!
 World!
+*)
 ```
 
 ### Channels
@@ -653,26 +676,33 @@ Channels are a typed conduit through which you can send and receive values with 
 ```
 
 ```sml
-- fun sum s c = send (c, foldl (op +) 0 s);
-val it = fn : int list -> int chan -> unit
+open CML
+open TextIO
 
-- fun main () = 
-    let val s = [7, 2, 8, ~9, 4, 0]
-        val ch = channel ()
-        val slen = (List.length s div 2)
-        val x = ref 0
-        val y = ref 0
-    in ( spawn (fn () => sum (List.take (s, slen)) ch)
-       ; spawn (fn () => sum (List.drop (s, slen)) ch)
-       ; x := recv ch
-       ; y := recv ch
-       ; print (Int.toString (!x)) ; print " "
-       ; print (Int.toString (!y)) ; print " "
-       ; print (Int.toString (!x + !y)) ; print "\n"
-       )
-    end
-- RunCML.doit (main, NONE);
-17 ~5 12
+fun sum s c = send (c, foldr (op +) 0 s)
+
+fun main () = 
+  let val s = [7, 2, 8, ~9, 4, 0]
+      val ch = channel ()
+      val slen = (List.length s div 2)
+      val x = ref 0
+      val y = ref 0
+  in ( 
+      spawn (fn () => sum (List.take (s, slen)) ch); 
+      spawn (fn () => sum (List.drop (s, slen)) ch); 
+      x := recv ch; 
+      y := recv ch; 
+      print (Int.toString (!x)); 
+      print " "; 
+      print (Int.toString (!y)); 
+      print " "; 
+      print (Int.toString (!x + !y)); 
+      print "\n"
+  )
+  end
+
+val _ = RunCML.doit(main, NONE)
+(* 17 ~5 12 *)
 ```
 
 Note that `send` is a blocking operation. It will not return until another thread attempts to `recv`.
@@ -681,43 +711,52 @@ Note that `send` is a blocking operation. It will not return until another threa
 `select` lets a thread wait on a list of communication events. 
 
 ```sml
+open CML
+open TextIO
 fun fib c q =
   let val x = ref 0
       val y = ref 1
       val break = ref false
       val nextFib = fn x' =>
         let val tmp = !x
-        in ( x := !y
-           ; y := tmp + (!y)
-           )
+        in ( 
+          x := !y; 
+          y := tmp + (!y)
+        )
         end
   in while not (!break) do
       select 
         [ wrap (sendEvt (c, !x), nextFib )
-        , wrap (recvEvt q, fn _ => ( break := true
-                                   ; print "quit\n" ))
+        , wrap (recvEvt q, fn _ => ( 
+            break := true; 
+            print "quit\n" 
+          ))
         ]
   end
 
 fun print_channel c q =
   let val i = ref 0
-  in ( while (!i) < 10 do
-          ( print (Int.toString (recv c)); print "\n"
-          ; i := (!i) + 1
-          )
-      ; send (q, true)
-      )
+  in ( 
+    while (!i) < 10 do ( 
+      print (Int.toString (recv c)); 
+      print "\n"; 
+      i := (!i) + 1
+    ); 
+    send (q, true)
+  )
   end
 
 fun main () =
   let val c : int chan = channel ()
       val q : bool chan = channel ()
-  in ( spawn (fn () => print_channel c q)
-     ; fib c q 
-     )
+  in ( 
+    spawn (fn () => print_channel c q); 
+    fib c q 
+  )
   end
 
-- RunCML.doit(main, NONE);
+val _ = RunCML.doit(main, NONE)
+(*
 0
 1
 1
@@ -729,7 +768,7 @@ fun main () =
 21
 34
 quit
-val it = 1 : OS.Process.status
+*)
 ```
 
 ### Mailboxes
@@ -751,7 +790,7 @@ val it = MB (ref (EMPTY {front=[],rear=[]})) : int mbox
 
 ### M and I-variables
 
-Sometimes you may need threadsafe, mutable variables. Concurrent ML provides them in two flavours:
+Sometimes you may need threadsafe, mutable variables. Concurrent ML provides them in two flavours.
 
 #### I-variables
 
