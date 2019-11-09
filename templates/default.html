@@ -1,25 +1,29 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>A Tour of Standard ML</title>
-        <link rel="stylesheet" href="/css/base.css" />
-        <link rel="stylesheet" href="/css/default.css" />
-        <link rel="stylesheet" href="/css/code.css">
-        <script src="/js/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-    </head>
-    <body>
-    <div class="row">
-      <div class="sidenav">
-        <div class="logo">
-          <a href="/">A Tour of Standard ML</a>
-        </div>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>A Tour of Standard ML</title>
+    <link rel="stylesheet" href="/css/default.css" />
+    <link rel="stylesheet" href="/css/code.css">
+    <script src="/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="topnav">
+      <a href="/"">A Tour of Standard ML</a>
+      <div class="toc-dropdown">
+        <button class="toc-btn">Table of Contents
+          <i class="fa fa-caret-down"></i>
+        </button>
         $partial("templates/tour-index.html")$
       </div>
+    </div>
+
+
+    <div class="row">
       $body$
-      </div>
-    </body>
+    </div>
+  </body>
 </html>
