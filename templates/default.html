@@ -12,13 +12,19 @@
   </head>
   <body>
     <div class="topnav">
-      <a href="/"">A Tour of Standard ML</a>
+      <div class="logol">
+        <a href="/">λ</a>
+      </div>
+      <div class="logo">
+        <a href="/">A Tour of Standard ML</a>
+      </div>
       <div class="toc-dropdown">
         <button class="toc-btn">Table of Contents
           <i class="fa fa-caret-down"></i>
         </button>
         $partial("templates/tour-index.html")$
       </div>
+      <div class="pagenav">
       <ul class="pagination">
       $if(previousPageNum)$
         <li>
@@ -30,7 +36,7 @@
       $else$
         <a href="#">
       $endif$
-        <span aria-hidden="true">&laquo;</span>
+        <span aria-hidden="true">↤</span>
         </a>
         </li>
       <li class="active">
@@ -46,10 +52,12 @@
       $else$
         <a href="#">
       $endif$
-        <span aria-hidden="true">&raquo;</span>
+        <span aria-hidden="true">↦</span>
         </a>
     </li>
     </ul>
+    </div>
+    </div>
     </div>
 
 

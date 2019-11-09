@@ -1,19 +1,28 @@
 html body {
   margin: 0;
   padding: 0;
+  font-size: 12;
 }
 
 .row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 960px;
+  max-width: 1080px;
   margin: auto
 }
 
 .code {
   align-self: center;
-  flex: 50%
+  align-content: center;
+  justify-content: center;
+  flex: 50%;
+  overflow: auto;
+}
+
+.logol {
+  text-decoration: none;
+  font-size: auto;
 }
 
 .body {
@@ -30,7 +39,7 @@ html body {
 
 .topnav a {
   border-right: 1px solid #251f2b;
-  float: inline-start;
+  float: left;
   display: block;
   color: #f0e8ff;
   text-align: center;
