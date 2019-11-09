@@ -2,6 +2,7 @@
 import           Data.Monoid (mappend)
 import           Data.Traversable
 import           Hakyll
+import           Hakyll.Web.Sass (sassCompiler)
 import           Hakyll.Web.Redirect
 import           Data.List
 import           System.FilePath
@@ -32,9 +33,10 @@ main = hakyll $ do
     match "js/*" $ do
         route idRoute
         compile copyFileCompiler
-    match "css/*" $ do
-        route idRoute
-        compile compressCssCompiler
+    match "css/*.scss" $ do
+        route $ setExtension "css"
+        let compressCssItem = fmap compressCss
+        compile (compressCssItem <$> sassCompiler)
 
     match "examples/*" $ do
         route   idRoute
