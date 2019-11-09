@@ -22,13 +22,15 @@ html body {
 
 .topnav {
   background-color: #333;
+  justify-content: center;
+  align-content: center;
   overflow: hidden;
   font-family: monospace;
 }
 
 .topnav a {
   border-right: 1px solid #251f2b;
-  float: left;
+  float: inline-start;
   display: block;
   color: #f0e8ff;
   text-align: center;
@@ -45,6 +47,7 @@ html body {
 
 .toc-dropdown .toc-btn {
   font-size: 12px;
+  float: inline-start;
   border: none;
   outline: none;
   color: white;
@@ -83,4 +86,22 @@ html body {
 
 .toc-dropdown:hover .toc {
   display: block;
+}
+
+.topnav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav ul li {float: left;}
+
+.topnav ul li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
 }

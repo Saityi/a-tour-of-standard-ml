@@ -19,11 +19,43 @@
         </button>
         $partial("templates/tour-index.html")$
       </div>
+      <ul class="pagination">
+      $if(previousPageNum)$
+        <li>
+      $else$
+        <li class="disabled">
+      $endif$
+      $if(previousPageNum)$
+        <a href="$previousPageUrl$">
+      $else$
+        <a href="#">
+      $endif$
+        <span aria-hidden="true">&laquo;</span>
+        </a>
+        </li>
+      <li class="active">
+      <a href="#">$index$.$section$ - $title$</a>
+      </li>
+      $if(nextPageNum)$
+        <li>
+      $else$
+        <li class="disabled">
+      $endif$
+      $if(nextPageNum)$
+        <a href="$nextPageUrl$">
+      $else$
+        <a href="#">
+      $endif$
+        <span aria-hidden="true">&raquo;</span>
+        </a>
+    </li>
+    </ul>
     </div>
 
 
     <div class="row">
       $body$
     </div>
+
   </body>
 </html>
