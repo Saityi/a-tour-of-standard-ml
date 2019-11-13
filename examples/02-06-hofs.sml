@@ -10,5 +10,6 @@ fun foldr combiner aggregate nil       = aggregate
 
 val sum       = foldr (op +) 0
 val _ = sum [1, 2, 3] (* 6 *)
+
 fun length xs = foldr (fn (_, length_count) => length_count + 1) 0 xs
 val _ = length [1, 2, 3] (* 3 *)

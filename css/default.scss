@@ -7,6 +7,16 @@ p {
   font: 12px sans-serif, serif;
 }
 
+.sourceCode {
+  font: 12px monospace, sans-serif, serif;
+  min-width: 0;
+  overflow: auto;
+}
+
+ul {
+  font: 12px sans-serif, serif;
+}
+
 .row {
   display: grid;
   grid-template-columns: 50% 50%;
