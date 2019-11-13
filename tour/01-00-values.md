@@ -9,4 +9,4 @@ The `val` keyword allows you to give a name to values. An explicit type declarat
 
 Note that values are immutable in Standard ML, but names may be redefined to give a new value an old name.
 
-Equality is tested using `=`
+Equality is tested using an equal sign, `=`.

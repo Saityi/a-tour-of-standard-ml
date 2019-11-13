@@ -1,69 +1,73 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>A Tour of Standard ML</title>
-    <link rel="stylesheet" href="/css/default.css" />
-    <link rel="stylesheet" href="/css/code.css">
-    <script src="/js/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-  </head>
-  <body>
-    <div class="topnav">
-      <div class="logol">
-        <a href="/">λ</a>
-      </div>
-      <div class="logo">
-        <a href="/">A Tour of Standard ML</a>
-      </div>
-      <div class="toc-dropdown">
-        <button class="toc-btn">Table of Contents
-          <i class="fa fa-caret-down"></i>
-        </button>
-        $partial("templates/tour-index.html")$
-      </div>
-      <div class="pagenav">
+
+<head>
+  <meta charset="utf-8">
+  <title>A Tour of Standard ML</title>
+  <link rel="stylesheet" href="/css/default.css" />
+  <link rel="stylesheet" href="/css/code.css">
+
+  <script src="/js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    document.onkeydown = function navArrow(evt) {
+      switch (evt.keyCode) {
+        case 37:
+          window.location.href = document.getElementById("prevpage").href
+          break
+        case 39:
+          window.location.href = document.getElementById("nextpage").href
+          break
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div class="topnav">
+
+    <div class="logol">
+      <a href="/">λ</a>
+    </div>
+
+    <div class="logo">
+      <a href="/">A Tour of Standard ML</a>
+    </div>
+
+    <div class="toc-dropdown">
+      <button class="toc-btn">Table of Contents
+        <i class="fa fa-caret-down"></i>
+      </button>
+      $partial("templates/tour-index.html")$
+    </div>
+
+    <div class="pagenav">
       <ul class="pagination">
-      $if(previousPageNum)$
-        <li>
-      $else$
-        <li class="disabled">
-      $endif$
-      $if(previousPageNum)$
-        <a href="$previousPageUrl$">
-      $else$
-        <a href="#">
-      $endif$
-        <span aria-hidden="true">↤</span>
-        </a>
+        $if(previousPageNum)$<li>
+        $else$<li class="disabled">
+        $endif$$if(previousPageNum)$  <a href="$previousPageUrl$" id="prevpage">
+        $else$<a href="#">
+        $endif$    <span aria-hidden="true">↤</span>
+          </a>
         </li>
-      <li class="active">
-      <a href="#">$index$.$section$ - $title$</a>
-      </li>
-      $if(nextPageNum)$
-        <li>
-      $else$
-        <li class="disabled">
-      $endif$
-      $if(nextPageNum)$
-        <a href="$nextPageUrl$">
-      $else$
-        <a href="#">
-      $endif$
-        <span aria-hidden="true">↦</span>
-        </a>
-    </li>
-    </ul>
-    </div>
-    </div>
-    </div>
 
+        <li class="active">
+          <a href="#">$index$.$section$ - $title$</a>
+        </li>
 
-    <div class="row">
-      $body$
+        $if(nextPageNum)$<li>
+        $else$<li class="disabled">
+        $endif$$if(nextPageNum)$  <a href="$nextPageUrl$" id="nextpage">
+        $else$<a href="#">
+        $endif$     <span aria-hidden="true">↦</span>
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
 
-  </body>
+  <div class="row">
+    $body$
+  </div>
+</body>
 </html>

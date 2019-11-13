@@ -55,11 +55,12 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ do
           ident <- getUnderlying
-          code  <- loadBody (codePath ident)
+          let expath = codePath ident
+          code  <- loadBody expath
           pages <- loadAll ("tour/*" .&&. hasVersion "precomp")
           let ctx = tourContext <> listField "pages" tourContext (return pages)
               codectx = if (null code) then ctx else ctx <> constField "code" code
-              ctx' = codectx <> paginateContext p page
+              ctx' = codectx <> paginateContext p page <> constField "examplef" (show expath)
           pandocCompiler
             >>= loadAndApplyTemplate "templates/tour.html" ctx'
             >>= loadAndApplyTemplate "templates/default.html" ctx'

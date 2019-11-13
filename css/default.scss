@@ -1,22 +1,20 @@
 html body {
   margin: 0;
   padding: 0;
-  font-size: 12;
+}
+
+p {
+  font: 12px sans-serif, serif;
 }
 
 .row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 1080px;
-  margin: auto
-}
+  display: grid;
+  grid-template-columns: 50% 50%;
+  max-width: 960px;
+  margin: auto;
 
-.code {
-  align-content: center;
-  justify-content: center;
-  flex: 50%;
-  overflow: auto;
+  height: inherit;
+  max-height: inherit;
 }
 
 .logol {
@@ -24,16 +22,12 @@ html body {
   font-size: auto;
 }
 
-.body {
-  flex: 50%
-}
-
 .topnav {
   background-color: #333;
   justify-content: center;
   align-content: center;
   overflow: hidden;
-  font-family: monospace;
+  font-family: serif monospace;
 }
 
 .topnav a {
@@ -47,6 +41,28 @@ html body {
   font-size: 12px;
 }
 
+.topnav a:hover, .toc-dropdown:hover .toc-btn {
+  background-color: #251f2b;
+}
+
+.topnav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav ul li {float: left;}
+
+.topnav ul li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
 .toc-dropdown {
   border-right: 1px solid #251f2b;
   float: left;
@@ -55,9 +71,7 @@ html body {
 
 .toc-dropdown .toc-btn {
   font-size: 12px;
-  float: inline-start;
   border: none;
-  outline: none;
   color: white;
   padding: 14px 16px;
   background-color: inherit;
@@ -65,16 +79,11 @@ html body {
   margin: 0;
 }
 
-.topnav a:hover, .toc-dropdown:hover .toc-btn {
-  background-color: #251f2b;
-}
-
 .toc {
   display: none;
   position: absolute;
   background-color: #333;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
 
@@ -94,22 +103,4 @@ html body {
 
 .toc-dropdown:hover .toc {
   display: block;
-}
-
-.topnav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
-
-.topnav ul li {float: left;}
-
-.topnav ul li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
 }

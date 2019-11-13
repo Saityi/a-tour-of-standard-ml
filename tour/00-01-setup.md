@@ -1,6 +1,6 @@
 ---
 chapter: Welcome
-title: Hello!
+title: Setup
 index: 0
 section: 1
 ---
