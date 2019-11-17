@@ -1,0 +1,13 @@
+language: haskell
+install: cabal install --only-dependencies
+script: cabal configure && cabal build && ./dist/build/site/site build
+deploy:
+  repo: Saityi/sml-tour
+  provider: pages
+  local_dir: _site
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: true
+  on:
+    branch: master
+
