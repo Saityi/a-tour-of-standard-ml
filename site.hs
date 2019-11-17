@@ -1,4 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeApplications #-}
+import           Data.Functor
 import           Data.Monoid (mappend)
 import           Data.Traversable
 import           Hakyll
@@ -7,21 +9,21 @@ import           Hakyll.Web.Redirect
 import           Data.List
 import           System.FilePath
 
-
 sortIds :: MonadMetadata m => [Identifier] -> m [Identifier]
-sortIds ids = fmap (\(_, _, i) -> i) <$> sort <$> indexed
+sortIds ids = fmap third . sort <$> indexedIdents
   where 
-    indexed = for ids $ \i -> do
-      chIdx <- getMetadataField' i "index"
-      chSec <- getMetadataField' i "section"
-      return $ (read chIdx :: Int, read chSec :: Int, i)
+    indexedIdents = for ids $ \ident -> do
+      chIdx <- getMetadataField' ident "index" <&> read @Int
+      chSec <- getMetadataField' ident "section" <&> read @Int
+      pure (chIdx, chSec, ident)
+    third (_, _, z) = z
 
 tourPaginator :: MonadMetadata m => m Paginate
 tourPaginator = do
-  pages <- getAllMetadata "tour/*"
-  ids   <- sortIds $ fst <$> pages
-  let pageId n = ids !! (n - 1)
-      grouper ps = pure $ map (\p -> [p]) ps
+  ms  <- getAllMetadata "tour/*"
+  ids <- sortIds $ (\(ident, meta) -> ident) <$> ms
+  let pageId n = ids !! (n - 1) -- start indices at 0
+      grouper = pure . fmap (\p -> [p])
   buildPaginateWith grouper "tour/*" pageId
 
 main :: IO ()
@@ -41,29 +43,32 @@ main = hakyll $ do
     match "examples/*" $ do
         route   idRoute
         compile getResourceBody
-
-    p <- tourPaginator
-
     -- Preload the tour files to make the metadata available in the sidenav
     match "tour/*" $ version "precomp" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
           >>= loadAndApplyTemplate "templates/tour.html" tourContext
           >>= relativizeUrls
-  
-    paginateRules p $ \page pattern -> do
+
+    paginator <- tourPaginator
+    paginateRules paginator $ \page pattern -> do
         route $ setExtension "html"
         compile $ do
           ident <- getUnderlying
           let expath = codePath ident
           code  <- loadBody expath
           pages <- loadAll ("tour/*" .&&. hasVersion "precomp")
-          let ctx = tourContext <> listField "pages" tourContext (return pages)
-              codectx = if (null code) then ctx else ctx <> constField "code" code
-              ctx' = codectx <> paginateContext p page <> constField "examplef" (show expath)
+          let codeCtx = if (null code) 
+                        then tourContext 
+                        else (tourContext <> constField "code" code)
+              ctx = codeCtx
+                <> listField "pages" tourContext (return pages)
+                <> paginateContext paginator page
+                <> constField "examplef" (show expath)
+              
           pandocCompiler
-            >>= loadAndApplyTemplate "templates/tour.html" ctx'
-            >>= loadAndApplyTemplate "templates/default.html" ctx'
+            >>= loadAndApplyTemplate "templates/tour.html" ctx
+            >>= loadAndApplyTemplate "templates/default.html" ctx
             >>= relativizeUrls
     
     create ["index.html"] $ do
