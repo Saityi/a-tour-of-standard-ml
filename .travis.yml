@@ -21,13 +21,13 @@ script:
   - stack exec site build
 
 deploy:
+  provider: pages
+  local_dir: _site
+  
   repo: Saityi/sml-tour
   target_branch: master
 
-  provider: pages
-  local_dir: _site
-
-  github_token: $github_token
+  github_token: $GITHUB_TOKEN
 
   skip_cleanup: true
   keep_history: true
