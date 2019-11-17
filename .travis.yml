@@ -27,7 +27,7 @@ deploy:
   provider: pages
   local_dir: _site
 
-  github_token: $GITHUB_TOKEN
+  github_token: $github_token
 
   skip_cleanup: true
   keep_history: true
