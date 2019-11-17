@@ -19,20 +19,15 @@ install:
 script:
   - stack build
   - stack exec site build
-
+  
 deploy:
   provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
+  on:
+    branch: master
   local_dir: _site
   
   repo: Saityi/sml-tour
   target_branch: master
-
-  github_token: $GITHUB_TOKEN
-
-  skip_cleanup: true
-  keep_history: true
-
-  verbose: true
-  on:
-    branch: master
-
