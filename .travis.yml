@@ -1,3 +1,4 @@
+sudo: true
 language: haskell
 cabal: "2.4"
 ghc:
