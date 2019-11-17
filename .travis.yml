@@ -1,30 +1,37 @@
 sudo: true
 language: haskell
-cabal: "2.4"
-ghc:
-  - "8.6.5"
 
 cache:
   directories:
-  - "$HOME/.cabal/store"
+  - "$HOME/.stack"
+  - "$TRAVIS_BUILD_DIR/.stack-work"
 
-install: cabal install --only-dependencies
+matrix:
+  Include:
+  - ghc: 8.6.5
+    env: STACK_YAML="$TRAVIS_BUILD_DIR/stack.yaml"
 
-script: cabal configure && cabal build && ./dist/build/site/site build
+install:
+  - curl -sSL https://get.haskellstack.org/ | sh
+  - stack --version
+  - stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks
 
+script:
+  - stack build
+  - stack exec site build
+  
+# Note: As of 17 Nov 19, Travis CI's 'build config validation' (beta)
+# breaks this deployment.
+# https://travis-ci.community/t/github-pages-deployment-fails-with-missing-github-token/5955/3
+# TODO: Reinvestigate if fixed.
 deploy:
-  repo: Saityi/sml-tour
-  target_branch: master
-
   provider: pages
-  local_dir: _site
-
-  github_token: $GITHUB_TOKEN
-
   skip_cleanup: true
-  keep_history: true
-
-  verbose: true
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: false
   on:
     branch: master
-
+  local_dir: _site
+  
+  repo: Saityi/sml-tour
+  target_branch: master
