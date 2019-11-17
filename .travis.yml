@@ -20,11 +20,15 @@ script:
   - stack build
   - stack exec site build
   
+# Note: As of 17 Nov 19, Travis CI's 'build config validation' (beta)
+# breaks this deployment.
+# https://travis-ci.community/t/github-pages-deployment-fails-with-missing-github-token/5955/3
+# TODO: Reinvestigate if fixed.
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-  keep_history: true
+  keep_history: false
   on:
     branch: master
   local_dir: _site
