@@ -3,6 +3,10 @@ cabal: "2.4"
 ghc:
   - "8.6.5"
 
+cache:
+  directories:
+  - "$HOME/.cabal/store"
+
 install: cabal install --only-dependencies
 
 script: cabal configure && cabal build && ./dist/build/site/site build
