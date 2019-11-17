@@ -1,4 +1,7 @@
 language: haskell
+cabal: "2.4"
+ghc:
+  - "8.6.5"
 install: cabal install --only-dependencies
 script: cabal configure && cabal build && ./dist/build/site/site build
 deploy:
