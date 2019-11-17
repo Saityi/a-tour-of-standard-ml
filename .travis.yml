@@ -1,16 +1,28 @@
 sudo: true
 language: haskell
-cabal: "2.4"
-ghc:
-  - "8.6.5"
 
 cache:
   directories:
-  - "$HOME/.cabal/store"
+  - "$HOME/.stack"
+  - "$TRAVIS_BUILD_DIR/.stack-work"
 
-install: cabal install --only-dependencies
+matrix:
+  Include:
+  - ghc: 8.2.2
+    env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.2.2.yaml"
+  - ghc: 8.4.4
+    env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.4.4.yaml"
+  - ghc: 8.6.5
+    env: STACK_YAML="$TRAVIS_BUILD_DIR/stack.yaml"
 
-script: cabal configure && cabal build && ./dist/build/site/site build
+install:
+  - curl -sSL https://get.haskellstack.org/ | sh
+  - stack --version
+  - stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks
+
+script:
+  - stack build
+  - stack exec site build
 
 deploy:
   repo: Saityi/sml-tour
