@@ -2,15 +2,24 @@ language: haskell
 cabal: "2.4"
 ghc:
   - "8.6.5"
+
 install: cabal install --only-dependencies
+
 script: cabal configure && cabal build && ./dist/build/site/site build
+
 deploy:
   repo: Saityi/sml-tour
+  target_branch: master
+
   provider: pages
   local_dir: _site
-  skip_cleanup: true
+
   github_token: $GITHUB_TOKEN
+
+  skip_cleanup: true
   keep_history: true
+
+  verbose: true
   on:
     branch: master
 
