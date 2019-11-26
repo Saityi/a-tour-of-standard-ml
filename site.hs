@@ -28,6 +28,10 @@ tourPaginator = do
 
 main :: IO ()
 main = hakyll $ do 
+    match "etc/*" $ do
+        route idRoute
+        compile copyFileCompiler
+
     match "templates/*" $ do
         route idRoute
         compile templateBodyCompiler
