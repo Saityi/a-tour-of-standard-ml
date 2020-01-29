@@ -24,8 +24,8 @@ This tour is intended to be followed at the command line, using the Standard ML 
 ```sml
 $ sml
 Standard ML of New Jersey v110.92 [built: Sat Aug 10 08:38:50 2019]
-- use "examples/00-01-hello.sml";
-[opening 00-01-hello.sml]
+- use "examples/00-01-setup.sml";
+[opening 00-01-setup.sml]
 Hello, world!
 ```
 
