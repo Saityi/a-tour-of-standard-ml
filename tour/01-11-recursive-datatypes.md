@@ -12,5 +12,6 @@ Types may be recursive, making it easy to define recursive data structures like 
   * `:: of 'a * 'a list`
 
 A binary tree could be defined as:
+
 - A `leaf`
 - Or a `node`, containing an item of type `'a` and two subtrees
