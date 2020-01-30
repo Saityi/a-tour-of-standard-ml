@@ -11,7 +11,6 @@ p {
   font: 12px sans-serif, serif;
 }
 
-@media screen and (min-width: 958px) {
   .row {
     display: grid;
     grid-template-columns: 50% 50%;
@@ -26,7 +25,6 @@ p {
     font: 12px monospace, sans-serif, serif;
     min-width: 0;
   }
-}
 
 .logol {
   text-decoration: none;
@@ -118,52 +116,4 @@ p {
 
 .toc-dropdown:hover .toc {
   display: block;
-}
-
-@media screen and (max-width: 957px) {
-  .row {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .tour-text {
-    flex: 1;
-  }
-
-  code, .code {
-    font: 12px monospace, sans-serif, serif;
-    flex: 1;
-  }
-
-  .pagenav {
-    display: none;
-  }
-
-  .logo, .logol {
-    display: none;
-  }
-
-  .topnav .toc-btn {
-    float: right;
-    display: block;
-  }
-
-  .topnav {position: relative;}
-  .topnav a.icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  .topnav a {
-    float: none;
-    display: block;
-    text-align: left;
-  }
-  .topnav .toc-dropdown {float: none;}
-  .topnav .toc {position: relative;}
-  .topnav .toc-dropdown .toc-btn {
-    display: inline-block;
-    width: 100%;
-    text-align: left;
-  }
 }

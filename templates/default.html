@@ -42,6 +42,13 @@
     <div class="logo">
       <a href="/">A Tour of Standard ML</a>
     </div>
+    $if(previousPageNum)$<div>
+    $else$<div class="disabled">
+    $endif$$if(previousPageNum)$  <a href="$previousPageUrl$" id="prevpage">
+    $else$<a href="#">
+    $endif$    <span aria-hidden="true">↤</span>
+      </a>
+    </div>
 
     <div class="toc-dropdown">
       <button class="toc-btn">Table of Contents
@@ -50,28 +57,13 @@
       $partial("templates/tour-index.html")$
     </div>
 
-    <div class="pagenav">
-      <ul class="pagination">
-        $if(previousPageNum)$<li>
-        $else$<li class="disabled">
-        $endif$$if(previousPageNum)$  <a href="$previousPageUrl$" id="prevpage">
-        $else$<a href="#">
-        $endif$    <span aria-hidden="true">↤</span>
+    $if(nextPageNum)$<div>
+    $else$<div class="disabled">
+    $endif$$if(nextPageNum)$  <a href="$nextPageUrl$" id="nextpage">
+    $else$<a href="#">
+    $endif$     <span aria-hidden="true">↦</span>
           </a>
-        </li>
 
-        <li class="active">
-          <a href="#">$index$.$section$ - $title$</a>
-        </li>
-
-        $if(nextPageNum)$<li>
-        $else$<li class="disabled">
-        $endif$$if(nextPageNum)$  <a href="$nextPageUrl$" id="nextpage">
-        $else$<a href="#">
-        $endif$     <span aria-hidden="true">↦</span>
-          </a>
-        </li>
-      </ul>
     </div>
   </div>
 
