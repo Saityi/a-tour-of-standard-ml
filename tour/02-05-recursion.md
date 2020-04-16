@@ -4,6 +4,5 @@ title: Recursion
 index: 2
 section: 5
 ---
-Iteration may be expressed using recursion. If you would like to sum a list of items, for example, you might use recursion. 
 
-This is safe as the Standard ML specification requires implementations to optimise recursive calls; it will not explode the stack as it may in other languages, and will compile to a tight, efficient loop.
+Standard ML encourages recursion in place of iteration; for example, to sum a list of numbers, you would use recursion. The specification requires that tail recursive functions be optimised away to not use stack space. `sum` here would explode the stack with a large enough list, but `sum_iter` would not, and would run as fast as an imperative loop.
