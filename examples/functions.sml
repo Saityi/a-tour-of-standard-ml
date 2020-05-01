@@ -9,4 +9,4 @@ val add : int -> int -> int =
 val inc' : int -> int =
     add 1
 
-val _ = (inc' 1) = (inc 1) (* true *)
+val i = (inc' 1) = (inc 1) (* true *)

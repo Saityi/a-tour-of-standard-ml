@@ -8,4 +8,4 @@ fun greet_player (mage {name=name, magic_type=magic_type}) =
   | greet_player (warrior {name=name, weapon=weapon}) =
     print ("Hullo, " ^ name ^ ", wielder of " ^ weapon ^ "!\n")
 
-val _ = greet_player (warrior {name="Grom", weapon="Gorehowl"})
+val u = greet_player (warrior {name="Grom", weapon="Gorehowl"})

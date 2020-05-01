@@ -17,5 +17,5 @@ end
 structure englishGreeter = Greeter(EnglishGreeting)
 structure essosGreeter = Greeter(ValyrianGreeting)
 
-val _ = englishGreeter.greet ()
-val _ = essosGreeter.greet ()
+val u = englishGreeter.greet ()
+val u' = essosGreeter.greet ()

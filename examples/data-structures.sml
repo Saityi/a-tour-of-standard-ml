@@ -10,6 +10,6 @@ val l : int list =
 val r : {name:string, occupation:string} = 
     {name="Zaphod Beeblebrox", occupation="President of the Galaxy"}
 
-val _ = #1 t (* 1 *)
-val _ = #occupation r (* "President of the Galaxy" *)
-val _ = {1="Hello", 2="world"} = ("Hello", "world") (* true *)
+val tupleField1      = #1 t (* 1 *)
+val zaphodsOccuption = #occupation r (* "President of the Galaxy" *)
+val tuplesAreRecords = {1="Hello", 2="world"} = ("Hello", "world") (* true *)

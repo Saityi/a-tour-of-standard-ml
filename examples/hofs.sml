@@ -1,5 +1,5 @@
-val _ = map (fn x => x + 1) [1, 1, 1] (* [2, 2, 2] *)
-val _ = List.filter (fn x => x mod 2 = 0) [1, 2, 3] (* [2] *)
+val twos = map (fn x => x + 1) [1, 1, 1] (* [2, 2, 2] *)
+val two  = List.filter (fn x => x mod 2 = 0) [1, 2, 3] (* [2] *)
 
 (* NOTE: Actually builtin *)
 fun foldr combiner aggregate nil       = aggregate
@@ -8,8 +8,8 @@ fun foldr combiner aggregate nil       = aggregate
     in combiner (x, the_rest_combined)
     end
 
-val sum       = foldr (op +) 0
-val _ = sum [1, 2, 3] (* 6 *)
+val sum = foldr (op +) 0
+val s = sum [1, 2, 3] (* 6 *)
 
-fun length xs = foldr (fn (_, length_count) => length_count + 1) 0 xs
-val _ = length [1, 2, 3] (* 3 *)
+fun length xs = foldr (fn (_, count) => count + 1) 0 xs
+val l = length [1, 2, 3] (* 3 *)

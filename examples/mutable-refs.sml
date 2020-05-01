@@ -12,5 +12,5 @@ fun ++ (x: ref int) : int = (
 )
 
 val x = ref 0
-val _ = ++x (* 1 *)
-val _ = !x (* 1 *)
+val xNewState = ++x (* 1 *)
+val xValue = !x (* 1 *)

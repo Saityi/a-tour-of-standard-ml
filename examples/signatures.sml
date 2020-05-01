@@ -10,5 +10,5 @@ structure ValyrianGreeting : GREETING = struct
   val greeting = "Valar morghulis.\n"
 end
 
-val _ = print EnglishGreeting.greeting
-val _ = print ValyrianGreeting.greeting
+val u  = print EnglishGreeting.greeting
+val u' = print ValyrianGreeting.greeting
