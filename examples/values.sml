@@ -6,7 +6,7 @@ val k = i
  * rather than modifying k or i *)
 val i' = i + 1
 
-(* This new value may ignored *)
+(* This new value may ignored, but that does not change i *)
 val _ = i + 1
 
 (* Names may be redefined *)

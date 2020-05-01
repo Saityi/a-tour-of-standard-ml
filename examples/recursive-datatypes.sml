@@ -1,6 +1,6 @@
+infixr 4 +:
 datatype 'a list = eol 
                  | +: of 'a * 'a list
-infixr 4 +:
 
 datatype 'a tree = leaf
                  | node of { value : 'a 

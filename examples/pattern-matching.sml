@@ -1,6 +1,3 @@
-datatype 'a list = nil 
-                 | :: of 'a * 'a list
-
 fun map f xs =
   case xs of
     nil     => nil
