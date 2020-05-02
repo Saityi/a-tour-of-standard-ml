@@ -23,9 +23,12 @@ This tour is intended to be followed at the command line, using the Standard ML 
 
 ```sml
 $ sml
-Standard ML of New Jersey v110.92 [built: Sat Aug 10 08:38:50 2019]
-- use "examples/00-01-setup.sml";
-[opening 00-01-setup.sml]
+Standard ML of New Jersey v110.97 [built: Wed Apr 22 09:39:44 2020]
+- (* You may change the directory from within Standard ML *);
+- OS.File.chDir("./examples");
+val it = () : unit
+- use "setup.sml";
+[opening setup.sml]
 Hello, world!
 ```
 

@@ -7,5 +7,5 @@ fun sum_iter xs =
   in sum_iter' xs 0
   end
 
-val _ = sum [1, 2, 3] (* 6 *)
-val _ = sum_iter [1, 2, 3] (* 6 *)
+val s = sum [1, 2, 3] (* 6 *)
+val s' = sum_iter [1, 2, 3] (* 6 *)

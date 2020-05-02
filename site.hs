@@ -83,4 +83,4 @@ main = hakyll $ do
 tourContext :: Context String
 tourContext = defaultContext
 
-codePath ident = fromFilePath ("examples/" <> (takeBaseName $ toFilePath ident) <> ".sml")
+codePath ident = fromFilePath ("examples/" <> drop 6 (takeBaseName $ toFilePath ident) <> ".sml")

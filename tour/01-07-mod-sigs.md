@@ -8,7 +8,7 @@ In Standard ML, modules expose all of their contents by default, but what is exp
 
 ```sml
 (* REPL *)
-- use "tour/01-07-mod-sigs.sml";
+- use "examples/mod-sigs.sml";
 structure Math : sig val e : real end
 
 - Math.e;
