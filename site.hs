@@ -3,15 +3,25 @@
 import           Data.Functor
 import           Data.Monoid (mappend)
 import           Data.Traversable
+import           Data.Text
+import           Text.Pandoc
 import           Hakyll
 import           Hakyll.Web.Sass (sassCompiler)
 import           Hakyll.Web.Redirect
+import           Hakyll.Web.Pandoc
 import           Data.List
 import           System.FilePath
 
+highlight :: Text -> Compiler Text
+highlight t =
+  let md = "``` sml\n" <> t <> "\n```"
+  in unsafeCompiler $ runIOorExplode $
+     readMarkdown defaultHakyllReaderOptions md >>=
+     writeHtml5String defaultHakyllWriterOptions
+
 sortIds :: MonadMetadata m => [Identifier] -> m [Identifier]
 sortIds ids = fmap third . sort <$> indexedIdents
-  where 
+  where
     indexedIdents = for ids $ \ident -> do
       chIdx <- getMetadataField' ident "index" <&> read @Int
       chSec <- getMetadataField' ident "section" <&> read @Int
@@ -27,7 +37,7 @@ tourPaginator = do
   buildPaginateWith grouper "tour/*" pageId
 
 main :: IO ()
-main = hakyll $ do 
+main = hakyll $ do
     match "etc/*" $ do
         route idRoute
         compile copyFileCompiler
@@ -36,9 +46,6 @@ main = hakyll $ do
         route idRoute
         compile templateBodyCompiler
 
-    match "js/*" $ do
-        route idRoute
-        compile copyFileCompiler
     match "css/*.scss" $ do
         route $ setExtension "css"
         let compressCssItem = fmap compressCss
@@ -60,21 +67,21 @@ main = hakyll $ do
         compile $ do
           ident <- getUnderlying
           let expath = codePath ident
-          code  <- loadBody expath
+          code  <- (Data.Text.pack <$> loadBody expath) >>= highlight
           pages <- loadAll ("tour/*" .&&. hasVersion "precomp")
-          let codeCtx = if (null code) 
-                        then tourContext 
-                        else (tourContext <> constField "code" code)
+          let codeCtx = if (Data.Text.null code)
+                        then tourContext
+                        else (tourContext <> constField "code" (Data.Text.unpack code))
               ctx = codeCtx
                 <> listField "pages" tourContext (return pages)
                 <> paginateContext paginator page
                 <> constField "examplef" (show expath)
-              
+
           pandocCompiler
             >>= loadAndApplyTemplate "templates/tour.html" ctx
             >>= loadAndApplyTemplate "templates/default.html" ctx
             >>= relativizeUrls
-    
+
     create ["index.html"] $ do
       route idRoute
       compile $ makeItem $ Redirect "tour/00-00-welcome.html"
@@ -83,4 +90,4 @@ main = hakyll $ do
 tourContext :: Context String
 tourContext = defaultContext
 
-codePath ident = fromFilePath ("examples/" <> drop 6 (takeBaseName $ toFilePath ident) <> ".sml")
+codePath ident = fromFilePath ("examples/" <> Data.List.drop 6 (takeBaseName $ toFilePath ident) <> ".sml")

@@ -9,5 +9,7 @@ executable site
                   , hakyll == 4.12.*
                   , filepath
                   , hakyll-sass
+                  , pandoc
+                  , text
   ghc-options:      -threaded
   default-language: Haskell2010
