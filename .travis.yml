@@ -11,12 +11,16 @@ matrix:
   - ghc: 8.6.5
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack.yaml"
 
+before_install:
+  - sudo apt-get -y install smlnj expect
+
 install:
   - curl -sSL https://get.haskellstack.org/ | sh
   - stack --version
   - stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks
 
 script:
+  - ./bin/test-examples.sh
   - stack build
   - stack exec site build
   
