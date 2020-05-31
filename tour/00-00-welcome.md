@@ -15,3 +15,5 @@ There are free, full-program optimising compilers for it, producing efficient na
 
 #### The Tour
 The tour consists of a set of chapters, each intended to showcase different features of Standard ML. There are examples included in the [Tour of Standard ML repository](https://github.com/Saityi/a-tour-of-standard-ml/tree/master/examples). You may view the table of contents by via the 'Table of Contents' menu at the top of the screen, and go to the next page by clicking the right arrow, or pressing pg-down on your keyboard. Pressing pg-up will navigate to the previous page in the tour.
+
+Although having a local SML/NJ available will make the tour easier to experiment with, it is possible to run the code samples on the page. (NOTE: This is a new feature! Please file issues at [the Github issue tracker.](https://github.com/Saityi/a-tour-of-standard-ml/issues))
