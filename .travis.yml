@@ -12,7 +12,7 @@ matrix:
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack.yaml"
 
 before_install:
-  - sudo apt-get -y install smlnj expect
+  - sudo apt-get -y install smlnj expect libcml-smlnj libcmlutil-smlnj libsmlnj-smlnj
 
 install:
   - curl -sSL https://get.haskellstack.org/ | sh
