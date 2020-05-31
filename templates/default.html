@@ -32,7 +32,7 @@
    function runCode() {
        var code = document.getElementById("codebox").value;
        var req = new XMLHttpRequest();
-       req.open('POST', 'https://52.60.213.103/cgi-bin/sml.sh', true);
+       req.open('POST', 'https://smltour.net/cgi-bin/sml.sh', true);
        req.setRequestHeader('Content-type', 'text/plain');
        req.onreadystatechange = function () {
            if (this.readyState == 4 && this.status == 200) {
