@@ -4,7 +4,9 @@ val (_,two,_) = n
 val (x,y,z) = n
 
 val charlie = dog { name = "Charlie" }
-val dog{name=name} = charlie
+val lucky   = dog { name = "Lucky" }
+val dog{name=pup1} = lucky
+val dog{name=pup2} = charlie
 val [_, second, _] = [1, 2, 3]
 
 (* Type error *)

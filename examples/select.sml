@@ -1,15 +1,17 @@
 fun fib c q =
   let val x = ref 0
       val y = ref 1
-      val break = ref false
       val nextFib = fn x' =>
         let val tmp = !x
         in (
-          x := !y;
-          y := tmp + (!y)
+            x := !y;
+            y := tmp + (!y)
         )
         end
-  in while not (!break) do
+      val break = ref false
+      fun endRecvd () = !break = true
+  in
+    while not (endRecvd ()) do
       CML.select
         [ CML.wrap (CML.sendEvt (c, !x), nextFib )
         , CML.wrap (CML.recvEvt q, fn _ => (
@@ -20,7 +22,8 @@ fun fib c q =
   end
 
 fun print_channel c q =
-  let val i = ref 0
+  let
+    val i = ref 0
   in (
     while (!i) < 10 do (
       print (Int.toString (CML.recv c));
@@ -32,8 +35,9 @@ fun print_channel c q =
   end
 
 fun main () =
-  let val c : int CML.chan = CML.channel ()
-      val q : bool CML.chan = CML.channel ()
+  let
+    val c : int CML.chan = CML.channel ()
+    val q : bool CML.chan = CML.channel ()
   in (
     CML.spawn (fn () => print_channel c q);
     fib c q

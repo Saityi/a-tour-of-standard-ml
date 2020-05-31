@@ -1,5 +1,6 @@
 fun main () =
-  let val m : int Mailbox.mbox = Mailbox.mailbox ()
+  let
+    val m : int Mailbox.mbox = Mailbox.mailbox ()
   in (
     Mailbox.send (m, 10);
     Mailbox.recv m; (* 10 *)

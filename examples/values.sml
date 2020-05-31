@@ -11,7 +11,8 @@ val _ = i + 1
 
 (* This is useful to run something like 'print';
  * it cannot be run as a standalone statement as
- * it returns a value
+ * it returns a value, as all function calls do
+ * in Standard ML
  *)
 val _ = print "Hello!\n"
 

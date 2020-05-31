@@ -1,12 +1,9 @@
 fun say s =
   let val delay = Time.fromMilliseconds 100
-      val waitThenPrint = fn () => (
-          OS.Process.sleep delay;
-          print s
-        )
       val i = ref 0
   in while (!i) < 5 do (
-      waitThenPrint ();
+      OS.Process.sleep delay;
+      print s;
       i := (!i) + 1
   )
   end

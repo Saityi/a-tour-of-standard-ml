@@ -8,14 +8,18 @@
   <link rel="stylesheet" href="/css/default.css" />
   <link rel="stylesheet" href="/css/pygments.css"/>
   <script>
-    document.onkeydown = function navArrow(evt) {
-      switch (evt.keyCode) {
-        case 33:
-          window.location.href = document.getElementById("prevpage").href
-          break
-        case 34:
-          window.location.href = document.getElementById("nextpage").href
-          break
+   document.onkeydown = function navArrow(evt) {
+      if (evt.target.nodeName.toLowerCase() === 'textarea') {
+          return;
+      } else {
+        switch (evt.keyCode) {
+          case 37:
+            window.location.href = document.getElementById("prevpage").href;
+            break;
+          case 39:
+            window.location.href = document.getElementById("nextpage").href;
+            break;
+        }
       }
     }
     /* https://www.w3schools.com/howto/howto_js_responsive_navbar_dropdown.asp */
