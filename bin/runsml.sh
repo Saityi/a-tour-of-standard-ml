@@ -16,5 +16,5 @@ tmpfile=$(mktemp)
 trap "rm ${tmpfile}" EXIT
 printf '%s' "${POST_DATA}" > "${tmpfile}"
 
-expect /usr/lib/cgi-bin/sml-expect.exp "${tmpfile}" | tail +3 | head -n -2 
+expect /usr/lib/cgi-bin/sml-expect.exp "${tmpfile}" | tail +3 | head -n -2
 exit 0

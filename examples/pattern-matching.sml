@@ -1,7 +1,7 @@
 fun map f xs =
   case xs of
     nil     => nil
-  | x :: xs => 
+  | x :: xs =>
     let val x'  = f x
         val xs' = map f xs
     in x' :: xs'

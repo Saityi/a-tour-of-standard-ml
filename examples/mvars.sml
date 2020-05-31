@@ -1,5 +1,5 @@
 structure S = SyncVar
-fun main () = 
+fun main () =
   let val i : int S.mvar = S.mVar ()
   in (
     S.mPut (i, 10);

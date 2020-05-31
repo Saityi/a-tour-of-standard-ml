@@ -23,6 +23,6 @@ User-defined operators, like `+:` used here, may be made usable infix, that is, 
 * If subtraction were defined `infixr`, it would try to parse it as `(3 - (4 - (5 - 6))) = ~2`
 * But subtraction is defined `infix`, so it actually parses as `(((3 - 4) - 5) - 6) = ~12`
 
-`<N>` specifies how tightly operators bind to their arguments. Given two operators, `*` and `-`, and the expression `3 * 4 - 5`: 
+`<N>` specifies how tightly operators bind to their arguments. Given two operators, `*` and `-`, and the expression `3 * 4 - 5`:
 - `infix 3 *`, `infix 4 -` would parse as `(3 * (4 - 5)) = ~3`
 - `infix 4 *`, `infix 3 -` would parse as `((3 * 4) - 5) = 7`

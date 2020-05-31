@@ -11,10 +11,10 @@ Note that values are immutable in Standard ML, but names may be redefined to giv
 
 Equality is tested using an equal sign, `=`.
 
-When you `use "examples/values.sml"`, you may notice something strange: 
+When you `use "examples/values.sml"`, you may notice something strange:
 
 ```sml
 val i = <hidden-value> : int
-``` 
+```
 
 What is this and why is it there? Since we redefined `i` in the same scope, the interpreter shows that it was defined once, but overridden, and that the original value is inaccessible now with `<hidden-value>`.

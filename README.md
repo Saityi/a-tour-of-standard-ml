@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.com/Saityi/a-tour-of-standard-ml.svg?branch=master)](https://travis-ci.com/Saityi/a-tour-of-standard-ml)
 
 # A Tour of Standard ML
-A fully featured tour is available at [A Tour of Standard ML](https://saityi.github.io/sml-tour/). 
+A fully featured tour is available at [A Tour of Standard ML](https://saityi.github.io/sml-tour/).
 
-A Tour of Standard ML is built using [Hakyll](https://jaspervdj.be/hakyll/); this repository hosts the source for the site generator. 
+A Tour of Standard ML is built using [Hakyll](https://jaspervdj.be/hakyll/); this repository hosts the source for the site generator.
 
 ## What is Standard ML?
 

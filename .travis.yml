@@ -23,7 +23,7 @@ script:
   - ./bin/test-examples.sh
   - stack build
   - stack exec site build
-  
+
 # Note: As of 17 Nov 19, Travis CI's 'build config validation' (beta)
 # breaks this deployment.
 # https://travis-ci.community/t/github-pages-deployment-fails-with-missing-github-token/5955/3
@@ -36,6 +36,6 @@ deploy:
   on:
     branch: master
   local_dir: _site
-  
+
   repo: Saityi/sml-tour
   target_branch: master

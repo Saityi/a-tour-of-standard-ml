@@ -16,7 +16,7 @@ expect -gl "- "
 send "CM.make \"\$/smlnj-lib.cm\";\r"
 expect -gl "- "
 send "use \"$filename\";\r"
-expect { 
+expect {
 	-gl "- " { puts $expect_out(buffer) }
 	-re ".*Error.*" { exit 1 }
 }

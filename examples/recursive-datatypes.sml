@@ -1,9 +1,9 @@
 infixr 4 +:
-datatype 'a list = eol 
+datatype 'a list = eol
                  | +: of 'a * 'a list
 
 datatype 'a tree = leaf
-                 | node of { value : 'a 
+                 | node of { value : 'a
                            , left  : 'a tree
                            , right : 'a tree
                            }
@@ -16,6 +16,6 @@ val inttree = node { value = 1
                                   }
                    , right = node { value = 3
                                   , left = leaf
-                                  , right = leaf 
+                                  , right = leaf
                                   }
                    }
