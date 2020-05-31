@@ -1,6 +1,3 @@
-open CML
-open TextIO
-
 fun say s = 
   let val delay = Time.fromMilliseconds 100
       val waitThenPrint = fn () => ( 
@@ -15,7 +12,7 @@ fun say s =
   end
 
 fun main () = ( 
-    spawn (fn () => say "World!\n");
+    CML.spawn (fn () => say "World!\n");
     say "Hello!\n"
 )
 

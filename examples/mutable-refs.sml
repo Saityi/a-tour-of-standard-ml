@@ -6,7 +6,7 @@ val y = ref 20
 val _ = x := !x + !y
 val _ = !x (* 30 *)
 
-fun ++ (x: ref int) : int = (
+fun ++ (x: int ref) : int = (
     x := !x + 1;
     !x (* Return the new value of x *)
 )

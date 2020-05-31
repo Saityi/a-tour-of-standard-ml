@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
 
 <head>
@@ -10,10 +11,10 @@
   <script>
     document.onkeydown = function navArrow(evt) {
       switch (evt.keyCode) {
-        case 37:
+        case 33:
           window.location.href = document.getElementById("prevpage").href
           break
-        case 39:
+        case 34:
           window.location.href = document.getElementById("nextpage").href
           break
       }
@@ -26,7 +27,20 @@
       } else {
         x.className = "topnav";
       }
-    } 
+     } 
+
+   function runCode() {
+       var code = document.getElementById("codebox").value;
+       var req = new XMLHttpRequest();
+       req.open('POST', 'http://52.60.213.103/cgi-bin/sml.sh', true);
+       req.setRequestHeader('Content-type', 'text/plain');
+       req.onreadystatechange = function () {
+           if (this.readyState == 4 && this.status == 200) {
+               document.getElementById("coderan").textContent = this.responseText;
+           }
+       }
+       req.send(code);
+   }
   </script>
 </head>
 

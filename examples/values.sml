@@ -9,6 +9,12 @@ val i' = i + 1
 (* This new value may ignored, but that does not change i *)
 val _ = i + 1
 
+(* This is useful to run something like 'print'; 
+ * it cannot be run as a standalone statement as
+ * it returns a value 
+ *)
+val _ = print "Hello!\n"
+
 (* Names may be redefined *)
 val i = 10
 

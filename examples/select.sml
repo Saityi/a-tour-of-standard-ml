@@ -1,5 +1,3 @@
-open CML
-open TextIO
 fun fib c q =
   let val x = ref 0
       val y = ref 1
@@ -12,9 +10,9 @@ fun fib c q =
         )
         end
   in while not (!break) do
-      select 
-        [ wrap (sendEvt (c, !x), nextFib )
-        , wrap (recvEvt q, fn _ => ( 
+      CML.select 
+        [ CML.wrap (CML.sendEvt (c, !x), nextFib )
+        , CML.wrap (CML.recvEvt q, fn _ => ( 
             break := true; 
             print "quit\n" 
           ))
@@ -25,19 +23,19 @@ fun print_channel c q =
   let val i = ref 0
   in ( 
     while (!i) < 10 do ( 
-      print (Int.toString (recv c)); 
+      print (Int.toString (CML.recv c)); 
       print "\n"; 
       i := (!i) + 1
     ); 
-    send (q, true)
+    CML.send (q, true)
   )
   end
 
 fun main () =
-  let val c : int chan = channel ()
-      val q : bool chan = channel ()
+  let val c : int CML.chan = CML.channel ()
+      val q : bool CML.chan = CML.channel ()
   in ( 
-    spawn (fn () => print_channel c q); 
+    CML.spawn (fn () => print_channel c q); 
     fib c q 
   )
   end

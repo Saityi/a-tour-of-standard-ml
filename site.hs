@@ -67,7 +67,7 @@ main = hakyll $ do
         compile $ do
           ident <- getUnderlying
           let expath = codePath ident
-          code  <- (Data.Text.pack <$> loadBody expath) >>= highlight
+          code  <- (Data.Text.pack <$> loadBody expath)
           pages <- loadAll ("tour/*" .&&. hasVersion "precomp")
           let codeCtx = if (Data.Text.null code)
                         then tourContext

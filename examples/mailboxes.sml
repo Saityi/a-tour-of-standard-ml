@@ -1,9 +1,10 @@
-open Mailbox
 fun main () = 
-  let val m : int mbox = mailbox ()
+  let val m : int Mailbox.mbox = Mailbox.mailbox ()
   in (
-    send (m, 10);
-    recv m; (* 10 *)
+    Mailbox.send (m, 10);
+    Mailbox.recv m; (* 10 *)
     OS.Process.success
   )
   end
+
+val _ = main ();

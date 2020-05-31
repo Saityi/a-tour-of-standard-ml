@@ -4,7 +4,7 @@ title: Module Signatures
 index: 1
 section: 7
 ---
-In Standard ML, modules expose all of their contents by default, but what is exported may be controlled by defining a signature of the exports for the module.
+In Standard ML, modules expose all of their contents by default -- you likely noticed how noisy the `Module` signature was before, what with it containing all of the contents of opening `String` -- but what is exported may be controlled by defining a signature of the exports for the module.
 
 ```sml
 (* REPL *)
