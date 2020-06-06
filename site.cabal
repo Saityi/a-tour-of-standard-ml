@@ -9,6 +9,7 @@ executable site
                   , hakyll == 4.12.*
                   , filepath
                   , hakyll-sass
+                  , mtl
                   , pandoc
                   , text
   ghc-options:      -threaded

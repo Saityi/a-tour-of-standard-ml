@@ -5,7 +5,17 @@ index: 0
 section: 1
 ---
 
-### Prerequisites
+### [Experimental] In-page compiler
+
+Although having a local SML/NJ available will make the tour easier to experiment with, it is possible to run the code samples on the page. The code runner comes with several libraries preloaded:
+
+- the standard library, known as [Basis](https://smlfamily.github.io/Basis/overview.html) 
+- [SML/NJ's library](https://www.smlnj.org/doc/smlnj-lib/Manual/toc.html)
+- [Concurrent ML](http://cml.cs.uchicago.edu/pages/refman.html) 
+
+(NOTE: This is a new feature! Please file issues at [the Github issue tracker.](https://github.com/Saityi/a-tour-of-standard-ml/issues))
+
+### Prerequisites to running examples locally
 
 - [Install Standard ML of New Jersey](https://www.smlnj.org/)
   - SML/NJ contains an interactive compiler manager and REPL which will be used for the examples throughout this tour
@@ -13,15 +23,9 @@ section: 1
 - Ensure SML/NJ has been added to the path as appropriate for your architecture
 - Clone the [repository](https://github.com/Saityi/a-tour-of-standard-ml/) to get the examples and begin the tour!
 
-```
+``` sml
 $ git clone https://github.com/Saityi/a-tour-of-standard-ml.git
-```
-
-### Getting Started
-
-This tour is intended to be followed at the command line, using the Standard ML of New Jersey REPL. There are several files you may load included in the repository.
-
-```sml
+$ cd a-tour-of-standard-ml
 $ sml
 Standard ML of New Jersey v110.97 [built: Wed Apr 22 09:39:44 2020]
 - (* You may change the directory from within Standard ML *);

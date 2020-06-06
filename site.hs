@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeApplications #-}
+import           Control.Monad.Except
 import           Data.Functor
 import           Data.Monoid (mappend)
 import           Data.Traversable
@@ -67,15 +68,16 @@ main = hakyll $ do
         compile $ do
           ident <- getUnderlying
           let expath = codePath ident
-          code  <- (Data.Text.pack <$> loadBody expath)
+          code  <- (Data.Text.pack <$> loadBody expath) `catchError` (const . pure $ "")
           pages <- loadAll ("tour/*" .&&. hasVersion "precomp")
           let codeCtx = if (Data.Text.null code)
                         then tourContext
-                        else (tourContext <> constField "code" (Data.Text.unpack code))
+                        else ( tourContext
+                            <> constField "code" (Data.Text.unpack code)
+                            <> constField "examplef" (show expath))
               ctx = codeCtx
                 <> listField "pages" tourContext (return pages)
                 <> paginateContext paginator page
-                <> constField "examplef" (show expath)
 
           pandocCompiler
             >>= loadAndApplyTemplate "templates/tour.html" ctx
@@ -90,4 +92,5 @@ main = hakyll $ do
 tourContext :: Context String
 tourContext = defaultContext
 
+codePath :: Identifier -> Identifier
 codePath ident = fromFilePath ("examples/" <> Data.List.drop 6 (takeBaseName $ toFilePath ident) <> ".sml")
