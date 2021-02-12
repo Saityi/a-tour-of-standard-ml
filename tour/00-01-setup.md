@@ -10,7 +10,7 @@ section: 1
 Although having a local SML/NJ available will make the tour easier to experiment with, it is possible to run the code samples on the page. The code runner comes with several libraries preloaded:
 
 - the standard library, known as [Basis](https://smlfamily.github.io/Basis/overview.html) 
-- [SML/NJ's library](https://www.smlnj.org/doc/smlnj-lib/Manual/toc.html)
+- [SML/NJ's library](https://www.smlnj.org/doc/smlnj-lib/)
 - [Concurrent ML](http://cml.cs.uchicago.edu/pages/refman.html) 
 
 (NOTE: This is a new feature! Please file issues at [the Github issue tracker.](https://github.com/Saityi/a-tour-of-standard-ml/issues))
