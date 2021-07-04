@@ -86,7 +86,7 @@ main = hakyll $ do
 
     create ["index.html"] $ do
       route idRoute
-      compile $ makeItem $ Redirect "tour/00-00-welcome.html"
+      compile $ makeItem $ Redirect "tour/welcome"
 
 
 tourContext :: Context String
