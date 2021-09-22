@@ -55,13 +55,14 @@ main = hakyll $ do
     match "examples/*" $ do
         route   idRoute
         compile getResourceBody
-    -- Preload the tour files to make the metadata available in the sidenav
+    -- Preload the tour files to make the metadata available in the dropdown nav
     match "tour/*" $ version "precomp" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
           >>= loadAndApplyTemplate "templates/tour.html" tourContext
           >>= relativizeUrls
 
+    -- Generate a dropdown nav
     paginator <- tourPaginator
     paginateRules paginator $ \page pattern -> do
         route $ setExtension "html"
@@ -84,10 +85,14 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" ctx
             >>= relativizeUrls
 
-    create ["index.html"] $ do
-      route idRoute
-      compile $ makeItem $ Redirect "tour/welcome"
 
+    create ["sitemap.xml"] $ do
+      route   idRoute
+      compile $ do
+        tourPages <- loadAll "tour/*"
+        let ctx = listField "entries" tourContext (pure tourPages)
+        makeItem ""
+          >>= loadAndApplyTemplate "templates/sitemap.xml" ctx
 
 tourContext :: Context String
 tourContext = defaultContext
